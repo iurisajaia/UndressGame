@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    position: 0,
+    movespeed: 30
+  }
+
+  moveBox = e => {
+
+
+    if (e.keyCode == 37) {
+      var left = this.state.position - this.state.movespeed;
+      this.setState({ position: left })
+    } else if (e.keyCode == 39) {
+      var left = this.state.position + this.state.movespeed;
+      this.setState({ position: left })
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.moveBox, false);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.moveBox, false);
+  }
+
+  render() {
+    return (
+      <>
+        <div className="game" onKeyDown={this.moveBox}>
+          <div id="bottle"></div>
+          <div id="box" style={{ left: `${this.state.position}px` }}>
+
+          </div>
+        </div>
+      </>
+    );
+  }
 }
 
 export default App;
+
