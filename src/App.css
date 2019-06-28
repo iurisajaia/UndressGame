@@ -23,11 +23,8 @@
   background: black;
 }
 @keyframes fall {
-  from {
-    top: -10px;
-  }
   to {
-    top: 100%;
+    top: 430px;
   }
 }
 
@@ -36,7 +33,7 @@
   position: absolute;
   width: 30px;
   height: 30px;
-  top: -40px;
+  top: -30px;
   background: black;
 }
 button {

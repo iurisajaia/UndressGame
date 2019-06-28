@@ -8,7 +8,8 @@ class App extends Component {
     last_x: 30,
     bottles: [],
     index: 0,
-    animationName: "down"
+    animationName: "down",
+    score: 0
   };
   currentBottles = <div> </div>;
 
@@ -38,7 +39,7 @@ class App extends Component {
       this.setState({ position: e.screenX - 700 });
     }
 
-    console.log(e.screenX - 700);
+    // console.log(e.screenX - 700);
   };
 
   componentDidMount() {
@@ -61,7 +62,16 @@ class App extends Component {
     document.removeEventListener("keydown", this.moveBox, false);
   }
   getCoords = a => {
-    // console.log(document.getElementById(a).getBoundingClientRect().bottom);
+    var bottleLeft = document.getElementById(a).getBoundingClientRect().left;
+    var bottleRight = document.getElementById(a).getBoundingClientRect().right;
+
+    var boxLeft = document.getElementById("box").getBoundingClientRect().left;
+    var boxRight = document.getElementById("box").getBoundingClientRect().right;
+
+    if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
+      this.setState({ score: this.state.score + 1 });
+      console.log(this.state.score);
+    }
   };
 
   render() {
@@ -71,12 +81,13 @@ class App extends Component {
     // .getBoundingClientRect().bottom
     return (
       <>
+        {this.state.score && <h1>{this.state.score}</h1>}
         <div className="game" onMouseMove={this.moveBoxWithMouse}>
           {bottles &&
             bottles.map(bottle_x => {
               return (
                 <div
-                  onAnimationStart={() => {
+                  onAnimationEnd={() => {
                     this.getCoords(this.state.bottles.indexOf(bottle_x));
                   }}
                   key={this.state.bottles.indexOf(bottle_x)}
