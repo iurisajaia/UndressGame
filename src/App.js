@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 
+
+
 class App extends Component {
   state = {
     position: 0,
     movespeed: 30
   }
+  bottle = <div className="bottle" > </div>;
+
 
   moveBox = e => {
 
@@ -19,8 +23,18 @@ class App extends Component {
     }
   }
 
+
+
+
+
   componentDidMount() {
     document.addEventListener("keydown", this.moveBox, false);
+    for (let i = 0; i <= 10; i++) {
+      setInterval(() => {
+        var bottle = <div className="bottle" > </div>
+      }, 2000)
+    }
+
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -30,7 +44,7 @@ class App extends Component {
     return (
       <>
         <div className="game" onKeyDown={this.moveBox}>
-          <div id="bottle"></div>
+          {this.bottle}
           <div id="box" style={{ left: `${this.state.position}px` }}>
 
           </div>

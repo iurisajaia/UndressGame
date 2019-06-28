@@ -17,13 +17,13 @@
   background: white;
 }
 
-#bottle {
+.bottle {
   position: absolute;
   width: 30px;
   height: 30px;
   background: black;
   left: 120px;
-  animation: topToBottom 2s infinite;
+  animation: topToBottom 2s forwards;
 }
 
 @keyframes topToBottom {
