@@ -35,11 +35,35 @@ class App extends Component {
       });
   };
   moveBoxWithMouse = e => {
-    if (e.screenX - 700 >= 0 && e.screenX - 700 <= 550) {
+    var leftOffset = document.getElementById("box").getBoundingClientRect()
+      .left;
+    if (e.screenX - 700 >= 0) {
       this.setState({ position: e.screenX - 700 });
     }
-
+    if (e.screenX - 700 >= 50) {
+      this.setState({ position: e.screenX - 700 });
+    }
     console.log(e.screenX - 700);
+  };
+  moveBox = e => {
+    if (e.keyCode == 37) {
+      var left = this.state.position - this.state.movespeed;
+      this.setState({ position: left });
+    } else if (e.keyCode == 39) {
+      var left = this.state.position + this.state.movespeed;
+      this.setState({ position: left });
+    }
+    // var leftOffset = document.getElementById("box").getBoundingClientRect()
+    //   .left;
+    // if (leftOffset <= 186.5) {
+    //   left = 0;
+    //   this.setState({ position: left });
+    // }
+    // if (leftOffset >= 700) {
+    //   left = 546;
+    //   this.setState({ position: left });
+    // }
+    // console.log(leftOffset);
   };
 
   componentDidMount() {
@@ -68,7 +92,11 @@ class App extends Component {
     }
     return (
       <>
-        <div className="game" onMouseMove={this.moveBoxWithMouse}>
+        <div
+          className="game"
+          onMouseMove={this.moveBoxWithMouse}
+          onKeyDown={this.moveBox}
+        >
           {bottles &&
             bottles.map(bottle_x => {
               return (
