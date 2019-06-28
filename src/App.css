@@ -1,37 +1,70 @@
+.fullgame {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 .game {
   width: 700px;
   height: 550px;
   margin: 20px auto;
-  border: 3px solid darkolivegreen;
+  background: lightblue;
   position: relative;
   overflow: hidden;
 }
-
+.left{
+  width: calc(50% - 350px);
+  border:1px solid black;
+}
+.result {
+  width: calc(50% - 350px);
+  border:1px solid black;
+}
+.text-center {
+  text-align: center;
+  width: 100%;
+}
 #box {
   width: 150px;
   height: 100px;
-  border: 2px solid black;
   position: absolute;
   bottom: 0;
   left: 0;
-  background: white;
+  background-image: url("./img/box.png");
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
 }
 
-.bottle {
+@keyframes fall {
+  to {
+    top: 430px;
+  }
+}
+
+.fallingItem {
+  animation: fall 2s linear;
   position: absolute;
   width: 30px;
-  height: 30px;
-  background: black;
-  left: 120px;
-  animation: topToBottom 2s forwards;
+  height: 80px;
+  top: -80px;
+  background-image: url("./img/bottle.webp");
+  background-size: 300%;
+  background-position: center;
 }
-
-@keyframes topToBottom {
-  from {
-      top: 0;
-  }
-
-  to {
-      top: 100%;
-  }
+button {
+  position: absolute;
+  z-index: 9999;
+}
+.girl {
+  width: 100%;
+}
+.score{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.start{
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
