@@ -2,7 +2,7 @@
   width: 700px;
   height: 550px;
   margin: 20px auto;
-  border: 3px solid darkolivegreen;
+  background: lightblue;
   position: relative;
   overflow: hidden;
 }
@@ -10,7 +10,6 @@
 #box {
   width: 150px;
   height: 100px;
-  border: 2px solid black;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -22,4 +21,24 @@
   width: 30px;
   height: 30px;
   background: black;
+}
+@keyframes fall {
+  from {
+    top: 0px;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.fallingItem {
+  animation: fall 2s linear;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: black;
+}
+button {
+  position: absolute;
+  z-index: 9999;
 }
