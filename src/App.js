@@ -11,6 +11,7 @@ class App extends Component {
     index: 0,
     animationName: "down",
     score: 0,
+    lose: 1,
     started: false
   };
   currentBottles = <div> </div>;
@@ -87,14 +88,16 @@ class App extends Component {
     if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
       this.setState({ score: this.state.score + 1 });
     }
+    if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
+      this.setState({ lose: this.state.lose + 1 });
+    }
   };
   startGame = (e) => {
-    this.setState({ started: this.state.started ? false : true })
-    e.target.style.display = 'None';
+    this.setState({ started: this.state.started ? false : true, lose: 0 })
   }
 
   render() {
-    if (this.state.bottles.length > 0 && this.state.started) {
+    if (this.state.bottles.length > 0 && this.state.started && this.state.lose != 3) {
       var bottles = this.state.bottles;
     }
     return (
@@ -109,6 +112,7 @@ class App extends Component {
               <h1 className="score">{this.state.score > 0 ? this.state.score * 100 : null}</h1>
             )}
             <button className="start" onClick={this.startGame}>Start</button>
+            {this.state.lose == 3 ? <h2 className="lose">You Lose</h2> : null}
             {bottles &&
               bottles.map(bottle_x => {
                 return (

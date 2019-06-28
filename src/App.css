@@ -68,3 +68,10 @@ button {
   right: 10px;
   top: 10px;
 }
+.lose{
+  color: darkred;
+  font-size: 50px;
+  position: absolute;
+  left: 38%;
+  top: 30%;
+}
