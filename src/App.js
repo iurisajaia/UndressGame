@@ -4,51 +4,36 @@ import "./App.css";
 class App extends Component {
   state = {
     position: 0,
-    movespeed: 50,
+    movespeed: 70,
     last_x: 30,
     bottles: [],
-    index: 0
+    index: 0,
+    started: false,
+    animationName: "down"
   };
   currentBottles = <div> </div>;
 
-  // fall = () => {
-  //   return setInterval(() => {
-  //     for (var i = 0; i < 450; i++) {
-  //       document.getElementById(this.state.index).style.top = i;
-  //     }
-  //     this.setState({ index: this.state.index++ });
-  //   }, 1000);
-  // };
-
-  // createBottle = () => {
-  //   var bottles = [];
-  //   for (let i = 0; i < 200; i++) {
-  //     var coor_x = Math.abs(
-  //       (this.state.last_x +
-  //         Math.pow(-1, Math.floor(Math.random() * 10)) *
-  //           (Math.random() * 350 + 20)) %
-  //         700
-  //     );
-  //     bottles.push(coor_x);
-  //   }
-  //   this.setState({ last_x: coor_x, bottles });
-  //   console.log(this.state);
-  //   this.currentBottles =
-  //     this.state.bottles &&
-  //     this.state.bottles.map(bottle_x => {
-  //       return (
-  //         <div
-  //           key={this.state.bottles.indexOf(bottle_x)}
-  //           id={this.state.bottles.indexOf(bottle_x)}
-  //           className="bottle"
-  //           style={{ left: `${bottle_x}px` }}
-  //         >
-  //           {" "}
-  //         </div>
-  //       );
-  //     });
-  //   console.log(this.state);
-  // };
+  createBottle = () => {
+    this.currentBottles =
+      this.state.bottles &&
+      this.state.bottles.map(bottle_x => {
+        return (
+          <div
+            key={this.state.bottles.indexOf(bottle_x)}
+            id={this.state.bottles.indexOf(bottle_x)}
+            className="bottle"
+            style={{
+              left: `${bottle_x}px`,
+              animationName: this.state.animationName,
+              animationDuration: "0.6s",
+              animationFillMode: "forwards"
+            }}
+          >
+            {" "}
+          </div>
+        );
+      });
+  };
 
   moveBox = e => {
     if (e.keyCode == 37) {
@@ -61,35 +46,20 @@ class App extends Component {
   };
 
   componentDidMount() {
-    var bottles = [];
+    var lastx = 350;
     document.addEventListener("keydown", this.moveBox, false);
-
+    var bottles = [];
     for (let i = 0; i < 200; i++) {
       var coor_x = Math.abs(
-        (this.state.last_x +
+        lastx +
           Math.pow(-1, Math.floor(Math.random() * 10)) *
-            (Math.random() * 350 + 20)) %
-          700
+            (Math.random() * 350 + 20)
       );
       bottles.push(coor_x);
+      lastx = coor_x;
     }
-    this.setState({ last_x: coor_x, bottles });
 
-    this.currentBottles =
-      this.state.bottles &&
-      this.state.bottles.map(bottle_x => {
-        return (
-          <div
-            key={this.state.bottles.indexOf(bottle_x)}
-            id={this.state.bottles.indexOf(bottle_x)}
-            className="bottle"
-            style={{ left: `${bottle_x}px` }}
-          >
-            {" "}
-          </div>
-        );
-      });
-    // console.log(this.state);
+    this.setState({ bottles });
   }
 
   componentWillUnmount() {
@@ -97,16 +67,33 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
+    if (this.state.bottles.length > 0) {
+      var bottles = this.state.bottles;
+    }
     return (
       <>
-        {/* () => {
-              this.fall(this.state.index);
-              this.setState({ index: this.state.index++ });
-            } */}
-
         <div className="game" onKeyDown={this.moveBox}>
-          {/* <button onClick={this.createBottle}>click</button> */}
+          {bottles &&
+            bottles.map(bottle_x => {
+              return (
+                <div
+                  key={this.state.bottles.indexOf(bottle_x)}
+                  id={this.state.bottles.indexOf(bottle_x)}
+                  className="fallingItem"
+                  style={{
+                    left: `${bottle_x}px`,
+                    animationDelay: `${this.state.bottles.indexOf(bottle_x)}s`
+                  }}
+                >
+                  {" "}
+                </div>
+              );
+            })}
+          <button
+            onClick={() => setInterval(this.fall(this.state.index), 1000)}
+          >
+            click
+          </button>
           {this.currentBottles}
           <div id="box" style={{ left: `${this.state.position}px` }} />
         </div>

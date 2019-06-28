@@ -23,3 +23,23 @@
   height: 30px;
   background: black;
 }
+@keyframes fall {
+  from {
+    top: 0px;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.fallingItem {
+  animation: fall 2s linear;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: black;
+}
+button {
+  position: absolute;
+  z-index: 9999;
+}
