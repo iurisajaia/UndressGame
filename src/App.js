@@ -33,15 +33,12 @@ class App extends Component {
         );
       });
   };
-
-  moveBox = e => {
-    if (e.keyCode == 37) {
-      var left = this.state.position - this.state.movespeed;
-      this.setState({ position: left });
-    } else if (e.keyCode == 39) {
-      var left = this.state.position + this.state.movespeed;
-      this.setState({ position: left });
+  moveBoxWithMouse = e => {
+    if (e.screenX - 700 >= 0 && e.screenX - 700 <= 550) {
+      this.setState({ position: e.screenX - 700 });
     }
+
+    console.log(e.screenX - 700);
   };
 
   componentDidMount() {
@@ -60,7 +57,6 @@ class App extends Component {
 
     this.setState({ bottles });
   }
-
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
@@ -75,7 +71,7 @@ class App extends Component {
     // .getBoundingClientRect().bottom
     return (
       <>
-        <div className="game" onKeyDown={this.moveBox}>
+        <div className="game" onMouseMove={this.moveBoxWithMouse}>
           {bottles &&
             bottles.map(bottle_x => {
               return (
