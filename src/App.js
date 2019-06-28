@@ -8,7 +8,6 @@ class App extends Component {
     last_x: 30,
     bottles: [],
     index: 0,
-    started: false,
     animationName: "down"
   };
   currentBottles = <div> </div>;
@@ -50,11 +49,11 @@ class App extends Component {
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
     for (let i = 0; i < 200; i++) {
-      var coor_x = Math.abs(
-        lastx +
-          Math.pow(-1, Math.floor(Math.random() * 10)) *
-            (Math.random() * 350 + 20)
-      );
+      var coor_x =
+        Math.abs(
+          lastx +
+            Math.pow(-1, Math.floor(Math.random() * 10)) * (Math.random() * 330)
+        ) % 670;
       bottles.push(coor_x);
       lastx = coor_x;
     }
@@ -65,11 +64,15 @@ class App extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
+  getCoords = a => {
+    // console.log(document.getElementById(a).getBoundingClientRect().bottom);
+  };
 
   render() {
     if (this.state.bottles.length > 0) {
       var bottles = this.state.bottles;
     }
+    // .getBoundingClientRect().bottom
     return (
       <>
         <div className="game" onKeyDown={this.moveBox}>
@@ -77,6 +80,9 @@ class App extends Component {
             bottles.map(bottle_x => {
               return (
                 <div
+                  onAnimationStart={() => {
+                    this.getCoords(this.state.bottles.indexOf(bottle_x));
+                  }}
                   key={this.state.bottles.indexOf(bottle_x)}
                   id={this.state.bottles.indexOf(bottle_x)}
                   className="fallingItem"
@@ -89,11 +95,6 @@ class App extends Component {
                 </div>
               );
             })}
-          <button
-            onClick={() => setInterval(this.fall(this.state.index), 1000)}
-          >
-            click
-          </button>
           {this.currentBottles}
           <div id="box" style={{ left: `${this.state.position}px` }} />
         </div>
