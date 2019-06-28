@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import girl1 from "./img/girl1.jpg";
+import girl2 from "./img/girl2.jpg";
 import "./App.css";
-
 class App extends Component {
   state = {
     position: 0,
@@ -8,8 +9,8 @@ class App extends Component {
     last_x: 30,
     bottles: [],
     index: 0,
-    started: false,
-    animationName: "down"
+    animationName: "down",
+    score: 0
   };
   currentBottles = <div> </div>;
 
@@ -43,7 +44,8 @@ class App extends Component {
     if (e.screenX - 700 >= 50) {
       this.setState({ position: e.screenX - 700 });
     }
-    console.log(e.screenX - 700);
+
+    // console.log(e.screenX - 700);
   };
   moveBox = e => {
     if (e.keyCode == 37) {
@@ -53,17 +55,6 @@ class App extends Component {
       var left = this.state.position + this.state.movespeed;
       this.setState({ position: left });
     }
-    // var leftOffset = document.getElementById("box").getBoundingClientRect()
-    //   .left;
-    // if (leftOffset <= 186.5) {
-    //   left = 0;
-    //   this.setState({ position: left });
-    // }
-    // if (leftOffset >= 700) {
-    //   left = 546;
-    //   this.setState({ position: left });
-    // }
-    // console.log(leftOffset);
   };
 
   componentDidMount() {
@@ -71,11 +62,11 @@ class App extends Component {
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
     for (let i = 0; i < 200; i++) {
-      var coor_x = Math.abs(
-        lastx +
-          Math.pow(-1, Math.floor(Math.random() * 10)) *
-            (Math.random() * 350 + 20)
-      );
+      var coor_x =
+        Math.abs(
+          lastx +
+            Math.pow(-1, Math.floor(Math.random() * 10)) * (Math.random() * 330)
+        ) % 670;
       bottles.push(coor_x);
       lastx = coor_x;
     }
@@ -85,6 +76,18 @@ class App extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
+  getCoords = a => {
+    var bottleLeft = document.getElementById(a).getBoundingClientRect().left;
+    var bottleRight = document.getElementById(a).getBoundingClientRect().right;
+
+    var boxLeft = document.getElementById("box").getBoundingClientRect().left;
+    var boxRight = document.getElementById("box").getBoundingClientRect().right;
+
+    if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
+      this.setState({ score: this.state.score + 1 });
+      console.log(this.state.score);
+    }
+  };
 
   render() {
     if (this.state.bottles.length > 0) {
@@ -92,34 +95,39 @@ class App extends Component {
     }
     return (
       <>
-        <div
-          className="game"
-          onMouseMove={this.moveBoxWithMouse}
-          onKeyDown={this.moveBox}
-        >
-          {bottles &&
-            bottles.map(bottle_x => {
-              return (
-                <div
-                  key={this.state.bottles.indexOf(bottle_x)}
-                  id={this.state.bottles.indexOf(bottle_x)}
-                  className="fallingItem"
-                  style={{
-                    left: `${bottle_x}px`,
-                    animationDelay: `${this.state.bottles.indexOf(bottle_x)}s`
-                  }}
-                >
-                  {" "}
-                </div>
-              );
-            })}
-          <button
-            onClick={() => setInterval(this.fall(this.state.index), 1000)}
-          >
-            click
-          </button>
-          {this.currentBottles}
-          <div id="box" style={{ left: `${this.state.position}px` }} />
+        {this.state.score && (
+          <div className="text-center">
+            <h1>{this.state.score}</h1>{" "}
+          </div>
+        )}
+        <div className="fullgame">
+          <div className="game" onMouseMove={this.moveBoxWithMouse}>
+            {bottles &&
+              bottles.map(bottle_x => {
+                return (
+                  <div
+                    onAnimationEnd={() => {
+                      this.getCoords(this.state.bottles.indexOf(bottle_x));
+                    }}
+                    key={this.state.bottles.indexOf(bottle_x)}
+                    id={this.state.bottles.indexOf(bottle_x)}
+                    className="fallingItem"
+                    style={{
+                      left: `${bottle_x}px`,
+                      animationDelay: `${this.state.bottles.indexOf(bottle_x)}s`
+                    }}
+                  >
+                    {" "}
+                  </div>
+                );
+              })}
+            {this.currentBottles}
+            <div id="box" style={{ left: `${this.state.position}px` }} />
+          </div>
+          <div className="result">
+            {this.state.score >= 10 && <img src={girl1} className="girl" />}
+            {/* {this.state.score > 20 && <img src={girl2} className="girl" />} */}
+          </div>
         </div>
       </>
     );
