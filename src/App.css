@@ -28,6 +28,15 @@
   }
 }
 
+@keyframes endFall {
+  from {
+    top: 430px;
+  }
+  to {
+    top: 550px;
+  }
+}
+
 .fallingItem {
   animation: fall 2s linear;
   position: absolute;
@@ -39,4 +48,12 @@
 button {
   position: absolute;
   z-index: 9999;
+}
+.endFall {
+  animation: endFall 1s linear;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: -30px;
+  background: black;
 }
