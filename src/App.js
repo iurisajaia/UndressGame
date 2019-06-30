@@ -38,17 +38,9 @@ class App extends Component {
       });
   };
   moveBoxWithMouse = e => {
-    // console.log(e.screenX)
     var screenWidth = document.getElementById('root').offsetWidth;
     var boxWidth = (screenWidth - 700) / 2;
-    // console.log(boxWidth)
-    // if (e.screenX - boxWidth >= 0) {
     this.setState({ position: e.screenX - boxWidth });
-    // }
-    // if (e.screenX - boxWidth >= 50) {
-    //   this.setState({ position: e.screenX - boxWidth });
-    // }
-
   };
   moveBox = e => {
     if (e.keyCode == 37) {
@@ -89,11 +81,11 @@ class App extends Component {
       this.setState({ score: this.state.score + 1 });
     }
     if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
-      this.setState({ lose: this.state.lose + 1 });
+      this.setState({ lose: this.state.lose + 1, level: 0 });
     }
 
     if (this.state.score % 10 == 9) {
-      this.setState({ level: this.state.level + 0.09 })
+      this.setState({ level: this.state.level + 0.085 })
     }
 
   };

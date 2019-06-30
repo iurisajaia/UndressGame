@@ -1,13 +1,15 @@
 .fullgame {
   display: flex;
-  width: 100%;
+  width: 90%;
+  margin: auto;
   justify-content: center;
 }
 .game {
   width: 700px;
   height: 550px;
-  margin: 20px auto;
-  background: lightblue;
+  background: #1c92d2;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to top, #f2fcfe, #1c92d2);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to top, #f2fcfe, #1c92d2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   position: relative;
   overflow: hidden;
 }
@@ -29,9 +31,10 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  background-image: url("./img/box.png");
-  background-size: cover;
-  background-position: center;
+  /* background-image: url("./img/box.png"); */
+  /* background-size: cover; */
+  /* background-position: center; */
+  background:black;
   cursor: pointer;
 }
 
