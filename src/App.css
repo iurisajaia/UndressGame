@@ -75,3 +75,8 @@ button {
   left: 38%;
   top: 30%;
 }
+.life{
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}

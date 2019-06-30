@@ -12,7 +12,8 @@ class App extends Component {
     animationName: "down",
     score: 0,
     lose: 1,
-    started: false
+    started: false,
+    level: 0
   };
   currentBottles = <div> </div>;
 
@@ -28,7 +29,6 @@ class App extends Component {
             style={{
               left: `${bottle_x}px`,
               animationName: this.state.animationName,
-              animationDuration: "0.6s",
               animationFillMode: "forwards"
             }}
           >
@@ -42,12 +42,12 @@ class App extends Component {
     var screenWidth = document.getElementById('root').offsetWidth;
     var boxWidth = (screenWidth - 700) / 2;
     // console.log(boxWidth)
-    if (e.screenX - boxWidth >= 0) {
-      this.setState({ position: e.screenX - boxWidth });
-    }
-    if (e.screenX - boxWidth >= 50) {
-      this.setState({ position: e.screenX - boxWidth });
-    }
+    // if (e.screenX - boxWidth >= 0) {
+    this.setState({ position: e.screenX - boxWidth });
+    // }
+    // if (e.screenX - boxWidth >= 50) {
+    //   this.setState({ position: e.screenX - boxWidth });
+    // }
 
   };
   moveBox = e => {
@@ -91,9 +91,14 @@ class App extends Component {
     if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
       this.setState({ lose: this.state.lose + 1 });
     }
+
+    if (this.state.score % 10 == 9) {
+      this.setState({ level: this.state.level + 0.09 })
+    }
+
   };
   startGame = (e) => {
-    this.setState({ started: this.state.started ? false : true, lose: 0 })
+    this.setState({ lose: 0, score: 0, started: true })
   }
 
   render() {
@@ -111,8 +116,10 @@ class App extends Component {
             {this.state.score && (
               <h1 className="score">{this.state.score > 0 ? this.state.score * 100 : null}</h1>
             )}
+            <h3>{2 - this.state.level}</h3>
             <button className="start" onClick={this.startGame}>Start</button>
             {this.state.lose == 3 ? <h2 className="lose">You Lose</h2> : null}
+            {this.state.started ? <h2 className="life">{3 - this.state.lose}</h2> : null}
             {bottles &&
               bottles.map(bottle_x => {
                 return (
@@ -125,7 +132,9 @@ class App extends Component {
                     className="fallingItem"
                     style={{
                       left: `${bottle_x}px`,
-                      animationDelay: `${this.state.bottles.indexOf(bottle_x)}s`
+                      animationDelay: `${this.state.bottles.indexOf(bottle_x) - this.state.level}s`,
+                      animationDuration: `${2 - this.state.level}s`,
+
                     }}
                   >
                     {" "}
