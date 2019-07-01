@@ -83,3 +83,32 @@ button {
   left: 10px;
   bottom: 10px;
 }
+
+
+
+
+/* header */
+.game-header{
+  width: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.game-header li {
+  width: 33.333%;
+  list-style-type: none;
+  background: #565b61;
+  text-align: center;
+  padding: 10px 0;
+  border-right: 1px solid white;
+}
+.game-header li a {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* ranking */
+
+
