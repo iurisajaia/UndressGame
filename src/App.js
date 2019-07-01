@@ -70,8 +70,6 @@ class App extends Component {
 
     if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
       this.setState({ score: this.state.score + 1 });
-    } else {
-      document.getElementById(a).className = "endFall";
     }
   };
 
