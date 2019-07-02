@@ -32,26 +32,24 @@ class Game extends Component {
   };
   currentBottles = <div> </div>;
 
-  createBottle = () => {
-    this.currentBottles =
-      this.state.bottles &&
-      this.state.bottles.map(bottle_x => {
-        return (
-          <div
-            key={this.state.bottles.indexOf(bottle_x)}
-            id={this.state.bottles.indexOf(bottle_x)}
-            className="bottle"
-            style={{
-              left: `${bottle_x}px`,
-              animationName: this.state.animationName,
-              animationFillMode: "forwards"
-            }}
-          >
-            {" "}
-          </div>
-        );
-      });
-  };
+  //   createBottle = () => {
+  //     this.currentBottles =
+  //       this.state.bottles &&
+  //       this.state.bottles.map(bottle_x => {
+  //         return (
+  //           <div
+  //             key={this.state.bottles.indexOf(bottle_x)}
+  //             id={this.state.bottles.indexOf(bottle_x)}
+  //             className="bottle"
+  //             style={{
+  //               left: `${bottle_x}px`,
+  //               animationName: this.state.animationName,
+  //               animationFillMode: "forwards"
+  //             }}
+  //           />
+  //         );
+  //       });
+  //   };
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
     if (e.touches[0].clientX < this.state.box_width / 2) {
@@ -82,14 +80,23 @@ class Game extends Component {
     });
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 200; i++) {
       var coor_x =
         (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
       bottles.push(coor_x);
       console.log(this.state.dev_width);
     }
-
     this.setState({ bottles });
+
+    // for (let i = 0; i < 10; i++) {
+    //   var bottles = [];
+    //   for (let j = 0; j < 20; j++) {
+    //     var coor_x =
+    //       (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+    //     bottles.push(coor_x);
+    //   }
+    //   this.setState({ [`bottles_l_${i}`]: bottles });
+    // }
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -115,6 +122,7 @@ class Game extends Component {
   startGame = () => {
     this.setState({ lose: 0, score: 0, started: true, paused: false });
   };
+
   stopGame = () => {
     this.setState({ lose: 0, score: 0, started: false });
   };
@@ -122,6 +130,40 @@ class Game extends Component {
     this.state.paused
       ? this.setState({ paused: false, movespeed: 10 })
       : this.setState({ paused: true, movespeed: 0 });
+    console.log(this.state);
+  };
+  //   generateContent = () => {
+  //     document.getElementById("game").appendChild(
+
+  //     )
+  //   };
+  fallenHandler = a => {
+    this.getCoords(a);
+    this.setState({
+      bottles: [
+        ...this.state.bottles,
+        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30)
+      ]
+    });
+
+    // let bottle = document.createElement("div");
+    // bottle.setAttribute("onAnimationEnd", () => this.fallenHandler(a + 20));
+    // bottle.setAttribute("id", a + 20);
+
+    //   <div
+    //     onAnimationEnd={() => this.fallenHandler(a)}
+    //     key={a}
+    //     id={a}
+    //     className="fallingItem"
+    //     style={{
+    //       left: `${(Math.random() * this.state.dev_width) %
+    //         (this.state.dev_width - 30)}px`,
+    //       animationDelay: `${a - this.state.level}s`,
+    //       animationDuration: `${2 - this.state.level}s`,
+    //       animationPlayState: this.state.paused ? "paused" : null
+    //     }}
+
+    // document.getElementById("bottleContainer").appendChild(bottle);
   };
 
   render() {
@@ -223,6 +265,40 @@ class Game extends Component {
                 {!this.state.paused ? (
                   <div id="box" style={{ left: `${this.state.position}px` }} />
                 ) : null}
+
+                <div id="bottleContainer">
+                  {bottles &&
+                    bottles.map(bottle_x => {
+                      let delay =
+                        this.state.bottles.indexOf(bottle_x) >= 200
+                          ? 200 - this.state.level
+                          : this.state.bottles.indexOf(bottle_x) -
+                            this.state.level;
+                      return (
+                        <div
+                          onAnimationEnd={() =>
+                            this.fallenHandler(
+                              this.state.bottles.indexOf(bottle_x)
+                            )
+                          }
+                          key={this.state.bottles.indexOf(bottle_x)}
+                          id={this.state.bottles.indexOf(bottle_x)}
+                          className="fallingItem"
+                          style={{
+                            left: `${bottle_x}px`,
+                            animationDelay: `${delay}s`,
+                            animationDuration: `${2 - this.state.level}s`,
+                            animationPlayState: this.state.paused
+                              ? "paused"
+                              : null
+                          }}
+                        >
+                          {" "}
+                        </div>
+                      );
+                    })}
+                </div>
+                <div id="box" style={{ left: `${this.state.position}px` }} />
               </div>
             </div>
           </>
