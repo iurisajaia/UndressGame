@@ -30,6 +30,7 @@ code {
   border-radius: 5px;
   border-top: 1px solid #c8e2d3;
   /* border-bottom: 1px solid #c2dece; */
+  margin: auto;
   top: 0;
   transition: all 0.06s ease-out;
   position: relative;

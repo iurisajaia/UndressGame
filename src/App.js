@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Game from "./components/game";
+import Game from "./components/game/game";
 import Ranking from "./components/ranking/rank";
 import Rule from "./components/rules/rule";
 import "./App.css";

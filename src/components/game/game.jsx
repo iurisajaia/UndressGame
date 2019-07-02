@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import Welcome from "./welcome/welcome";
+import Welcome from "../welcome/welcome";
+import HeartSvg from "./heartSvg";
 
 class Game extends Component {
   state = {
@@ -14,7 +15,7 @@ class Game extends Component {
     index: 0,
     animationName: "down",
     score: 0,
-    lose: 1,
+    lose: 0,
     started: false,
     level: 0,
     paused: false
@@ -101,6 +102,7 @@ class Game extends Component {
       ]
     });
   };
+
   render() {
     if (
       this.state.bottles.length > 0 &&
@@ -110,28 +112,97 @@ class Game extends Component {
       var bottles = this.state.bottles;
     }
     var started = this.state.started;
+
+    var lifes = [];
+    for (var i = 0; i < 3 - this.state.lose; i++) {
+      lifes.push(i);
+    }
     return (
       <>
         {started ? (
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
               <div className="game" id="game">
-                <button onClick={this.stopGame}>Home</button>
-                {this.state.score && (
-                  <h1 className="score">
-                    {this.state.score > 0 ? this.state.score * 100 : null}
-                  </h1>
-                )}
-                <h3>{2 - this.state.level}</h3>
-                <button className="start" onClick={this.pauseGame}>
-                  Pause
-                </button>
+                <div className="top-nav">
+                  <div className="top-left">
+                    <div>
+                      {this.state.score ? (
+                        <h1>{this.state.score * 100}</h1>
+                      ) : (
+                        <h1>0</h1>
+                      )}
+                    </div>
+                    <div>
+                      {this.state.started ? (
+                        <div className="life-box">
+                          {lifes.map(l => {
+                            return <HeartSvg key={l} />;
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="top-right">
+                    <button className="button" onClick={this.stopGame}>
+                      Home
+                    </button>
+
+                    <button className="button" onClick={this.pauseGame}>
+                      Pause
+                    </button>
+                  </div>
+                </div>
+
+                {this.state.paused ? (
+                  <div className="paused-wraper">
+                    <button className="button" onClick={this.pauseGame}>
+                      Resume
+                    </button>
+                  </div>
+                ) : null}
+
                 {this.state.lose == 3 ? (
-                  <h2 className="lose">You Lose</h2>
+                  <>
+                    <div className="text-center">
+                      <h2>You Lose</h2>
+                      <button className="button" onClick={this.startGame}>
+                        Play Again
+                      </button>
+                    </div>
+                  </>
                 ) : null}
-                {this.state.started ? (
-                  <h2 className="life">{3 - this.state.lose}</h2>
+
+                {bottles &&
+                  bottles.map(bottle_x => {
+                    return (
+                      <div
+                        onAnimationEnd={() => {
+                          this.getCoords(this.state.bottles.indexOf(bottle_x));
+                        }}
+                        key={this.state.bottles.indexOf(bottle_x)}
+                        id={this.state.bottles.indexOf(bottle_x)}
+                        className="fallingItem"
+                        style={{
+                          left: `${bottle_x}px`,
+                          animationDelay: `${this.state.bottles.indexOf(
+                            bottle_x
+                          ) - this.state.level}s`,
+                          animationDuration: `${2 - this.state.level}s`,
+                          animationPlayState: this.state.paused
+                            ? "paused"
+                            : null
+                        }}
+                      >
+                        {" "}
+                      </div>
+                    );
+                  })}
+                {this.currentBottles}
+                {!this.state.paused ? (
+                  <div id="box" style={{ left: `${this.state.position}px` }} />
                 ) : null}
+
                 <div id="bottleContainer">
                   {bottles &&
                     bottles.map(bottle_x => {
