@@ -2,6 +2,10 @@ import React, { Component } from "react";
 
 class Game extends Component {
   state = {
+    dev_width: document.getElementById("root").offsetWidth,
+    dev_height: "",
+    box_width: "",
+    box_height: "",
     position: 0,
     movespeed: 70,
     last_x: 30,
@@ -48,18 +52,18 @@ class Game extends Component {
   moveBoxWithMouse = e => {
     console.log("touch", e.touches[0].clientX);
     var screenWidth = document.getElementById("root").offsetWidth;
-    var gameCoords = [
-      document.getElementById("game").offsetLeft,
-      document.getElementById("game").offsetLeft +
-        document.getElementById("game").offsetWidth
-    ];
-    if (e.touches[0].clientX < gameCoords[0] + 75) {
+    // var gameCoords = [
+    //   document.getElementById("game").offsetLeft,
+    //   document.getElementById("game").offsetLeft +
+    //     document.getElementById("game").offsetWidth
+    // ];
+    if (e.touches[0].clientX < this.state.box_width / 2) {
       this.setState({ position: 0 });
-    } else if (e.touches[0].clientX > gameCoords[1] - 75) {
-      this.setState({ position: 550 });
+    } else if (e.touches[0].clientX > screenWidth - this.state.box_width / 2) {
+      this.setState({ position: screenWidth - this.state.box_width });
     } else {
       this.setState({
-        position: e.touches[0].clientX - 75 - (screenWidth - 700) / 2
+        position: e.touches[0].clientX - this.state.box_width / 2
       });
     }
     // console.log(e.screenX - 600);
@@ -74,17 +78,27 @@ class Game extends Component {
     }
   };
   componentDidMount() {
-    var lastx = 350;
+    this.setState({
+      dev_width: window.innerWidth,
+      dev_height: window.innerHeight,
+      box_width: window.innerWidth / 4,
+      box_height: (window.innerWidth * 3) / 16
+    });
+    // var lastx = 0;
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
     for (let i = 0; i < 20; i++) {
-      var coor_x =
-        Math.abs(
-          lastx +
-            Math.pow(-1, Math.floor(Math.random() * 10)) * (Math.random() * 330)
-        ) % 670;
+      //   var coor_x =
+      //     Math.abs(
+      //       lastx +
+      //         Math.pow(-1, Math.floor(Math.random() * 10)) *
+      //           ((Math.random() * this.state.dev_width) / 2)
+      //     ) %
+      //     (this.state.dev_width - 30);
+      var coor_x = Math.random() * this.state.dev_width;
       bottles.push(coor_x);
-      lastx = coor_x;
+      console.log(this.state.dev_width);
+      //   lastx = coor_x;
     }
 
     this.setState({ bottles });
@@ -143,7 +157,6 @@ class Game extends Component {
                 <div
                   onAnimationEnd={() => {
                     this.getCoords(this.state.bottles.indexOf(bottle_x));
-                    console.log(this.state.bottles);
                   }}
                   key={this.state.bottles.indexOf(bottle_x)}
                   id={this.state.bottles.indexOf(bottle_x)}

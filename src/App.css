@@ -48,7 +48,7 @@
 }
 #box {
   width: 25%;
-  height: 100px;
+  height: Calc(100vw * 3 / 16);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -61,18 +61,18 @@
 
 @keyframes fall {
   to {
-    top: 430px;
+    top: Calc(100vh - 100vw * 3 / 16);
   }
 }
 
-@keyframes endFall {
+/* @keyframes endFall {
   from {
     top: 430px;
   }
   to {
     top: 550px;
   }
-}
+} */
 
 .fallingItem {
   animation: fall 2s linear;
