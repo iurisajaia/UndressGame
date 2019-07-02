@@ -54,7 +54,11 @@ class Game extends Component {
     for (let i = 0; i < 10; i++) {
       var coor_x =
         (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-      bottles.push({ coor_x: coor_x, id: i, speed: 70 });
+      bottles.push({
+        coor_x: coor_x,
+        id: i,
+        speed: Math.floor((i / 20) * Math.abs(Math.random() * 2)) + 20
+      });
       console.log(this.state.dev_width);
     }
     this.setState({ bottles });
@@ -105,7 +109,8 @@ class Game extends Component {
             (Math.random() * this.state.dev_width) %
             (this.state.dev_width - 30),
           id: temp.length,
-          speed: 70
+          speed:
+            Math.floor((temp.length / 20) * Math.abs(Math.random() * 2)) + 20
         }
       ]
     });
@@ -197,7 +202,7 @@ class Game extends Component {
                           style={{
                             left: `${bottle.coor_x}px`,
                             animationDelay: `${delay}s`,
-                            animationDuration: `${2 - this.state.level}s`,
+                            animationDuration: `${40 / bottle.speed}s`,
                             animationPlayState: this.state.paused
                               ? "paused"
                               : null
