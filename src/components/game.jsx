@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Welcome from "./welcome/welcome";
 
 class Game extends Component {
   state = {
@@ -21,7 +22,8 @@ class Game extends Component {
     score: 0,
     lose: 1,
     started: false,
-    level: 0
+    level: 0,
+    paused: false
   };
   currentBottles = <div> </div>;
 
@@ -110,59 +112,79 @@ class Game extends Component {
       this.setState({ level: this.state.level + 0.085 });
     }
   };
-  startGame = e => {
-    this.setState({ lose: 0, score: 0, started: true });
+  startGame = () => {
+    this.setState({ lose: 0, score: 0, started: true, paused: false });
+  };
+  stopGame = () => {
+    this.setState({ lose: 0, score: 0, started: false });
+  };
+  pauseGame = () => {
+    this.setState({ paused: this.state.paused ? false : true });
   };
   render() {
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
-      this.state.lose != 3
+      this.state.lose != 3 &&
+      !this.state.paused
     ) {
       var bottles = this.state.bottles;
     }
+    var started = this.state.started;
     return (
-      <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
-        <div className="game" id="game">
-          {this.state.score && (
-            <h1 className="score">
-              {this.state.score > 0 ? this.state.score * 100 : null}
-            </h1>
-          )}
-          <h3>{2 - this.state.level}</h3>
-          <button className="start" onClick={this.startGame}>
-            Start
-          </button>
-          {this.state.lose == 3 ? <h2 className="lose">You Lose</h2> : null}
-          {this.state.started ? (
-            <h2 className="life">{3 - this.state.lose}</h2>
-          ) : null}
-          {bottles &&
-            bottles.map(bottle_x => {
-              return (
-                <div
-                  onAnimationEnd={() => {
-                    this.getCoords(this.state.bottles.indexOf(bottle_x));
-                    console.log(this.state.bottles);
-                  }}
-                  key={this.state.bottles.indexOf(bottle_x)}
-                  id={this.state.bottles.indexOf(bottle_x)}
-                  className="fallingItem"
-                  style={{
-                    left: `${bottle_x}px`,
-                    animationDelay: `${this.state.bottles.indexOf(bottle_x) -
-                      this.state.level}s`,
-                    animationDuration: `${2 - this.state.level}s`
-                  }}
-                >
-                  {" "}
-                </div>
-              );
-            })}
-          {this.currentBottles}
-          <div id="box" style={{ left: `${this.state.position}px` }} />
-        </div>
-      </div>
+      <>
+        {started ? (
+          <>
+            <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
+              <div className="game" id="game">
+                <button onClick={this.stopGame}>Home</button>
+                {this.state.score && (
+                  <h1 className="score">
+                    {this.state.score > 0 ? this.state.score * 100 : null}
+                  </h1>
+                )}
+                <h3>{2 - this.state.level}</h3>
+                <button className="start" onClick={this.pauseGame}>
+                  Pause
+                </button>
+                {this.state.lose == 3 ? (
+                  <h2 className="lose">You Lose</h2>
+                ) : null}
+                {this.state.started ? (
+                  <h2 className="life">{3 - this.state.lose}</h2>
+                ) : null}
+                {bottles &&
+                  bottles.map(bottle_x => {
+                    return (
+                      <div
+                        onAnimationEnd={() => {
+                          this.getCoords(this.state.bottles.indexOf(bottle_x));
+                          console.log(this.state.bottles);
+                        }}
+                        key={this.state.bottles.indexOf(bottle_x)}
+                        id={this.state.bottles.indexOf(bottle_x)}
+                        className="fallingItem"
+                        style={{
+                          left: `${bottle_x}px`,
+                          animationDelay: `${this.state.bottles.indexOf(
+                            bottle_x
+                          ) - this.state.level}s`,
+                          animationDuration: `${2 - this.state.level}s`
+                        }}
+                      >
+                        {" "}
+                      </div>
+                    );
+                  })}
+                {this.currentBottles}
+                <div id="box" style={{ left: `${this.state.position}px` }} />
+              </div>
+            </div>
+          </>
+        ) : (
+          <Welcome startGame={this.startGame} />
+        )}
+      </>
     );
   }
 }
