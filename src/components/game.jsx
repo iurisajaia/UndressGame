@@ -46,18 +46,21 @@ class Game extends Component {
       });
   };
   moveBoxWithMouse = e => {
+    console.log("touch", e.touches[0].clientX);
     var screenWidth = document.getElementById("root").offsetWidth;
     var gameCoords = [
       document.getElementById("game").offsetLeft,
       document.getElementById("game").offsetLeft +
         document.getElementById("game").offsetWidth
     ];
-    if (e.screenX < gameCoords[0] + 75) {
+    if (e.touches[0].clientX < gameCoords[0] + 75) {
       this.setState({ position: 0 });
-    } else if (e.screenX > gameCoords[1] - 75) {
+    } else if (e.touches[0].clientX > gameCoords[1] - 75) {
       this.setState({ position: 550 });
     } else {
-      this.setState({ position: e.screenX - 75 - (screenWidth - 700) / 2 });
+      this.setState({
+        position: e.touches[0].clientX - 75 - (screenWidth - 700) / 2
+      });
     }
     // console.log(e.screenX - 600);
   };
@@ -119,7 +122,7 @@ class Game extends Component {
       var bottles = this.state.bottles;
     }
     return (
-      <div className="fullgame" onMouseMove={this.moveBoxWithMouse}>
+      <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
         <div className="game" id="game">
           {this.state.score && (
             <h1 className="score">
