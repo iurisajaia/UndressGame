@@ -38,7 +38,7 @@ class App extends Component {
       });
   };
   moveBoxWithMouse = e => {
-    var screenWidth = document.getElementById('root').offsetWidth;
+    var screenWidth = document.getElementById("root").offsetWidth;
     var boxWidth = (screenWidth - 700) / 2;
     this.setState({ position: e.screenX - boxWidth });
   };
@@ -59,7 +59,7 @@ class App extends Component {
       var coor_x =
         Math.abs(
           lastx +
-          Math.pow(-1, Math.floor(Math.random() * 10)) * (Math.random() * 330)
+            Math.pow(-1, Math.floor(Math.random() * 10)) * (Math.random() * 330)
         ) % 670;
       bottles.push(coor_x);
       lastx = coor_x;
@@ -85,33 +85,41 @@ class App extends Component {
     }
 
     if (this.state.score % 10 == 9) {
-      this.setState({ level: this.state.level + 0.085 })
+      this.setState({ level: this.state.level + 0.085 });
     }
-
   };
-  startGame = (e) => {
-    this.setState({ lose: 0, score: 0, started: true })
-  }
+  startGame = e => {
+    this.setState({ lose: 0, score: 0, started: true });
+  };
 
   render() {
-    if (this.state.bottles.length > 0 && this.state.started && this.state.lose != 3) {
+    if (
+      this.state.bottles.length > 0 &&
+      this.state.started &&
+      this.state.lose != 3
+    ) {
       var bottles = this.state.bottles;
     }
     return (
       <>
-
         <div className="fullgame">
           <div className="left">
             {this.state.score >= 10 && <img src={girl2} className="girl" />}
           </div>
           <div className="game" onMouseMove={this.moveBoxWithMouse}>
             {this.state.score && (
-              <h1 className="score">{this.state.score > 0 ? this.state.score * 100 : null}</h1>
+              <h1 className="score">
+                {this.state.score > 0 ? this.state.score * 100 : null}
+              </h1>
             )}
             <h3>{2 - this.state.level}</h3>
-            <button className="start" onClick={this.startGame}>Start</button>
+            <button className="start" onClick={this.startGame}>
+              Start
+            </button>
             {this.state.lose == 3 ? <h2 className="lose">You Lose</h2> : null}
-            {this.state.started ? <h2 className="life">{3 - this.state.lose}</h2> : null}
+            {this.state.started ? (
+              <h2 className="life">{3 - this.state.lose}</h2>
+            ) : null}
             {bottles &&
               bottles.map(bottle_x => {
                 return (
@@ -124,9 +132,9 @@ class App extends Component {
                     className="fallingItem"
                     style={{
                       left: `${bottle_x}px`,
-                      animationDelay: `${this.state.bottles.indexOf(bottle_x) - this.state.level}s`,
-                      animationDuration: `${2 - this.state.level}s`,
-
+                      animationDelay: `${this.state.bottles.indexOf(bottle_x) -
+                        this.state.level}s`,
+                      animationDuration: `${2 - this.state.level}s`
                     }}
                   >
                     {" "}
@@ -134,9 +142,7 @@ class App extends Component {
                 );
               })}
             {this.currentBottles}
-            <div id="box" style={{ left: `${this.state.position}px` }} >
-
-            </div>
+            <div id="box" style={{ left: `${this.state.position}px` }} />
           </div>
           <div className="result">
             {this.state.score >= 20 && <img src={girl1} className="girl" />}
