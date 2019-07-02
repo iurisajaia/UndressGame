@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Header from "../header";
 
 class Rule extends Component {
   state = {};
   render() {
     return (
       <>
+        <Header />
         <div className="rules">
           <div className="rules-header">გათამაშების წესები</div>
           <ul className="rules-list">

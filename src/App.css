@@ -12,7 +12,7 @@
 }
 .fullgame {
   width: 100%;
-  height: calc(100vh - 33px);
+  height: 100vh;
   margin: auto;
   justify-content: center;
 }
@@ -207,4 +207,47 @@ button {
   font-size: 9px;
   font-family: mrglovani;
   line-height: 13px;
+}
+
+/* welcome wrapper */
+.welcome-wraper {
+  width: 100%;
+  height: 100vh;
+  background: #333b3f;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.menu {
+  width: 100%;
+  justify-content: center;
+  height: 85vh;
+  display: flex;
+  align-items: center;
+}
+.menu ul {
+  margin: 0;
+  padding: 0;
+}
+.footer {
+  display: block;
+  width: 100%;
+  height: 15vh;
+  text-align: center;
+}
+.menu ul li {
+  margin: 35px 0;
+  list-style-type: none;
+}
+.menu ul button,
+.menu ul a {
+  background: #fff;
+  border: 2px solid darkred;
+  color: black;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px 20px;
+  display: block;
+  text-decoration: none;
+  font-family: nino;
 }
