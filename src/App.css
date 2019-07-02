@@ -1,3 +1,15 @@
+@font-face {
+  font-family: arial_geo;
+  src: url("./fonts/arial_geo.ttf");
+}
+@font-face {
+  font-family: mrglovani;
+  src: url("./fonts/bpg_mrgvlovani_caps_2010.ttf");
+}
+@font-face {
+  font-family: nino;
+  src: url("./fonts/bpg_nino_mtavruli_normal.ttf");
+}
 .fullgame {
   display: flex;
   width: 90%;
@@ -7,19 +19,27 @@
 .game {
   width: 700px;
   height: 550px;
-  background: #1c92d2;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to top, #f2fcfe, #1c92d2);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to top, #f2fcfe, #1c92d2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #1c92d2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top,
+    #f2fcfe,
+    #1c92d2
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top,
+    #f2fcfe,
+    #1c92d2
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   position: relative;
   overflow: hidden;
 }
-.left{
+.left {
   width: calc(50% - 350px);
-  border:1px solid black;
+  border: 1px solid black;
 }
 .result {
   width: calc(50% - 350px);
-  border:1px solid black;
+  border: 1px solid black;
 }
 .text-center {
   text-align: center;
@@ -34,7 +54,7 @@ background: linear-gradient(to top, #f2fcfe, #1c92d2); /* W3C, IE 10+/ Edge, Fir
   /* background-image: url("./img/box.png"); */
   /* background-size: cover; */
   /* background-position: center; */
-  background:black;
+  background: black;
   cursor: pointer;
 }
 
@@ -61,25 +81,119 @@ button {
 .girl {
   width: 100%;
 }
-.score{
+.score {
   position: absolute;
   top: 10px;
   left: 10px;
 }
-.start{
+.start {
   position: absolute;
   right: 10px;
   top: 10px;
 }
-.lose{
+.lose {
   color: darkred;
   font-size: 50px;
   position: absolute;
   left: 38%;
   top: 30%;
 }
-.life{
+.life {
   position: absolute;
   left: 10px;
   bottom: 10px;
+}
+
+/* header */
+.game-header {
+  width: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.game-header li {
+  list-style-type: none;
+  padding: 10px 0;
+}
+.game-header a {
+  text-align: center;
+  border-right: 1px solid white;
+  background: #565b61;
+  width: 33.333%;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px;
+  transition: 0.5s;
+  font-family: nino;
+  font-size: 12px;
+}
+.game-header a:hover {
+  color: #fff;
+}
+.game-header a:last-child {
+  border-right: none;
+}
+.game-header a.active {
+  background: #44484b;
+}
+/* ranking */
+
+.ranking-list {
+  padding: 0;
+  margin: 0;
+}
+.ranking-list-item {
+  list-style-type: none;
+  background: #44484b;
+  color: #fff;
+  padding: 20px 0;
+}
+.ranking-list-item:nth-child(even) {
+  background: #333b3f;
+}
+.ranking-box {
+  display: flex;
+  align-items: center;
+}
+.rank {
+  width: 15%;
+  padding-left: 20px;
+}
+.person {
+  width: 60%;
+}
+.name {
+  display: block;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.medal {
+  width: 25%;
+  text-align: center;
+}
+
+/* Rules */
+.rules {
+  background: #44484b;
+  color: #fff;
+  padding-bottom: 100px;
+}
+.rules-header {
+  padding: 15px 0 10px;
+  text-align: center;
+  font-family: mrglovani;
+  font-size: 13px;
+}
+.rules-list {
+  margin: 0;
+  padding: 0 0 0px 30px;
+}
+.rules-list li {
+  padding: 5px 10px;
+  font-size: 9px;
+  font-family: mrglovani;
+  line-height: 13px;
 }
