@@ -31,26 +31,24 @@ class Game extends Component {
   };
   currentBottles = <div> </div>;
 
-  createBottle = () => {
-    this.currentBottles =
-      this.state.bottles &&
-      this.state.bottles.map(bottle_x => {
-        return (
-          <div
-            key={this.state.bottles.indexOf(bottle_x)}
-            id={this.state.bottles.indexOf(bottle_x)}
-            className="bottle"
-            style={{
-              left: `${bottle_x}px`,
-              animationName: this.state.animationName,
-              animationFillMode: "forwards"
-            }}
-          >
-            {" "}
-          </div>
-        );
-      });
-  };
+  //   createBottle = () => {
+  //     this.currentBottles =
+  //       this.state.bottles &&
+  //       this.state.bottles.map(bottle_x => {
+  //         return (
+  //           <div
+  //             key={this.state.bottles.indexOf(bottle_x)}
+  //             id={this.state.bottles.indexOf(bottle_x)}
+  //             className="bottle"
+  //             style={{
+  //               left: `${bottle_x}px`,
+  //               animationName: this.state.animationName,
+  //               animationFillMode: "forwards"
+  //             }}
+  //           />
+  //         );
+  //       });
+  //   };
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
     if (e.touches[0].clientX < this.state.box_width / 2) {
@@ -81,14 +79,23 @@ class Game extends Component {
     });
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
-    for (let i = 0; i < 20; i++) {
-      var coor_x =
-        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-      bottles.push(coor_x);
-      console.log(this.state.dev_width);
+    // for (let i = 0; i < 20; i++) {
+    //   var coor_x =
+    //     (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+    //   bottles.push(coor_x);
+    //   console.log(this.state.dev_width);
+    // }
+    for (let i = 0; i < 10; i++) {
+      var bottles = [];
+      for (let j = 0; j < 20; j++) {
+        var coor_x =
+          (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+        bottles.push(coor_x);
+      }
+      //   console.log(bottles);
+      //   let key = this.state[`bottles_l_${i}`];
+      this.setState({ [`bottles_l_${i}`]: bottles });
     }
-
-    this.setState({ bottles });
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -124,6 +131,7 @@ class Game extends Component {
     console.log(this.state);
   };
   render() {
+    console.log(this.state);
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -180,7 +188,6 @@ class Game extends Component {
                       </div>
                     );
                   })}
-                {this.currentBottles}
                 <div id="box" style={{ left: `${this.state.position}px` }} />
               </div>
             </div>
