@@ -1,27 +1,51 @@
+.fullgame {
+  display: flex;
+  width: 90%;
+  margin: auto;
+  justify-content: center;
+}
 .game {
   width: 700px;
   height: 550px;
-  margin: 20px auto;
-  background: lightblue;
+  background: #1c92d2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top,
+    #f2fcfe,
+    #1c92d2
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top,
+    #f2fcfe,
+    #1c92d2
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   position: relative;
   overflow: hidden;
 }
-
+.left {
+  width: calc(50% - 350px);
+  border: 1px solid black;
+}
+.result {
+  width: calc(50% - 350px);
+  border: 1px solid black;
+}
+.text-center {
+  text-align: center;
+  width: 100%;
+}
 #box {
   width: 150px;
   height: 100px;
   position: absolute;
   bottom: 0;
   left: 0;
-  background: white;
+  /* background-image: url("./img/box.png"); */
+  /* background-size: cover; */
+  /* background-position: center; */
+  background: black;
+  cursor: pointer;
 }
 
-.bottle {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background: black;
-}
 @keyframes fall {
   to {
     top: 430px;
@@ -41,19 +65,39 @@
   animation: fall 2s linear;
   position: absolute;
   width: 30px;
-  height: 30px;
-  top: -30px;
-  background: black;
+  height: 80px;
+  top: -80px;
+  background-image: url("./img/bottle.png");
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 button {
   position: absolute;
   z-index: 9999;
 }
-.endFall {
-  animation: endFall 1s linear;
+.girl {
+  width: 100%;
+}
+.score {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  top: -30px;
-  background: black;
+  top: 10px;
+  left: 10px;
+}
+.start {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.lose {
+  color: darkred;
+  font-size: 50px;
+  position: absolute;
+  left: 38%;
+  top: 30%;
+}
+.life {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
 }
