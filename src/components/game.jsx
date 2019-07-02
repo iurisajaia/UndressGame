@@ -128,7 +128,6 @@ class Game extends Component {
     this.state.paused
       ? this.setState({ paused: false, movespeed: 10 })
       : this.setState({ paused: true, movespeed: 0 });
-    console.log(this.state);
   };
   render() {
     console.log(this.state);
@@ -146,6 +145,11 @@ class Game extends Component {
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
               <div className="game" id="game">
+                {this.state.paused ? (
+                  <div className="paused-wraper">
+                    <button onClick={this.pauseGame}>Resume</button>
+                  </div>
+                ) : null}
                 <button onClick={this.stopGame}>Home</button>
                 {this.state.score && (
                   <h1 className="score">
@@ -157,7 +161,10 @@ class Game extends Component {
                   Pause
                 </button>
                 {this.state.lose == 3 ? (
-                  <h2 className="lose">You Lose</h2>
+                  <>
+                    <h2 className="lose">You Lose</h2>
+                    <button onClick={this.startGame}>Play Again</button>
+                  </>
                 ) : null}
                 {this.state.started ? (
                   <h2 className="life">{3 - this.state.lose}</h2>
@@ -168,7 +175,6 @@ class Game extends Component {
                       <div
                         onAnimationEnd={() => {
                           this.getCoords(this.state.bottles.indexOf(bottle_x));
-                          console.log(this.state.bottles);
                         }}
                         key={this.state.bottles.indexOf(bottle_x)}
                         id={this.state.bottles.indexOf(bottle_x)}
@@ -188,7 +194,14 @@ class Game extends Component {
                       </div>
                     );
                   })}
+<<<<<<< HEAD
                 <div id="box" style={{ left: `${this.state.position}px` }} />
+=======
+                {this.currentBottles}
+                {!this.state.paused ? (
+                  <div id="box" style={{ left: `${this.state.position}px` }} />
+                ) : null}
+>>>>>>> 1eebb58a21332c77afa1c721bbd76c28d1d6daae
               </div>
             </div>
           </>
