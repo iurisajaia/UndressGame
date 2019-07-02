@@ -79,23 +79,23 @@ class Game extends Component {
     });
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
-    // for (let i = 0; i < 20; i++) {
-    //   var coor_x =
-    //     (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-    //   bottles.push(coor_x);
-    //   console.log(this.state.dev_width);
-    // }
-    for (let i = 0; i < 10; i++) {
-      var bottles = [];
-      for (let j = 0; j < 20; j++) {
-        var coor_x =
-          (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-        bottles.push(coor_x);
-      }
-      //   console.log(bottles);
-      //   let key = this.state[`bottles_l_${i}`];
-      this.setState({ [`bottles_l_${i}`]: bottles });
+    for (let i = 0; i < 200; i++) {
+      var coor_x =
+        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+      bottles.push(coor_x);
+      console.log(this.state.dev_width);
     }
+    this.setState({ bottles });
+
+    // for (let i = 0; i < 10; i++) {
+    //   var bottles = [];
+    //   for (let j = 0; j < 20; j++) {
+    //     var coor_x =
+    //       (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+    //     bottles.push(coor_x);
+    //   }
+    //   this.setState({ [`bottles_l_${i}`]: bottles });
+    // }
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -121,6 +121,7 @@ class Game extends Component {
   startGame = () => {
     this.setState({ lose: 0, score: 0, started: true, paused: false });
   };
+
   stopGame = () => {
     this.setState({ lose: 0, score: 0, started: false });
   };
@@ -128,9 +129,42 @@ class Game extends Component {
     this.state.paused
       ? this.setState({ paused: false, movespeed: 10 })
       : this.setState({ paused: true, movespeed: 0 });
+    console.log(this.state);
+  };
+  //   generateContent = () => {
+  //     document.getElementById("game").appendChild(
+
+  //     )
+  //   };
+  fallenHandler = a => {
+    this.getCoords(a);
+    this.setState({
+      bottles: [
+        ...this.state.bottles,
+        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30)
+      ]
+    });
+
+    // let bottle = document.createElement("div");
+    // bottle.setAttribute("onAnimationEnd", () => this.fallenHandler(a + 20));
+    // bottle.setAttribute("id", a + 20);
+
+    //   <div
+    //     onAnimationEnd={() => this.fallenHandler(a)}
+    //     key={a}
+    //     id={a}
+    //     className="fallingItem"
+    //     style={{
+    //       left: `${(Math.random() * this.state.dev_width) %
+    //         (this.state.dev_width - 30)}px`,
+    //       animationDelay: `${a - this.state.level}s`,
+    //       animationDuration: `${2 - this.state.level}s`,
+    //       animationPlayState: this.state.paused ? "paused" : null
+    //     }}
+
+    // document.getElementById("bottleContainer").appendChild(bottle);
   };
   render() {
-    console.log(this.state);
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -145,11 +179,6 @@ class Game extends Component {
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
               <div className="game" id="game">
-                {this.state.paused ? (
-                  <div className="paused-wraper">
-                    <button onClick={this.pauseGame}>Resume</button>
-                  </div>
-                ) : null}
                 <button onClick={this.stopGame}>Home</button>
                 {this.state.score && (
                   <h1 className="score">
@@ -161,47 +190,44 @@ class Game extends Component {
                   Pause
                 </button>
                 {this.state.lose == 3 ? (
-                  <>
-                    <h2 className="lose">You Lose</h2>
-                    <button onClick={this.startGame}>Play Again</button>
-                  </>
+                  <h2 className="lose">You Lose</h2>
                 ) : null}
                 {this.state.started ? (
                   <h2 className="life">{3 - this.state.lose}</h2>
                 ) : null}
-                {bottles &&
-                  bottles.map(bottle_x => {
-                    return (
-                      <div
-                        onAnimationEnd={() => {
-                          this.getCoords(this.state.bottles.indexOf(bottle_x));
-                        }}
-                        key={this.state.bottles.indexOf(bottle_x)}
-                        id={this.state.bottles.indexOf(bottle_x)}
-                        className="fallingItem"
-                        style={{
-                          left: `${bottle_x}px`,
-                          animationDelay: `${this.state.bottles.indexOf(
-                            bottle_x
-                          ) - this.state.level}s`,
-                          animationDuration: `${2 - this.state.level}s`,
-                          animationPlayState: this.state.paused
-                            ? "paused"
-                            : null
-                        }}
-                      >
-                        {" "}
-                      </div>
-                    );
-                  })}
-<<<<<<< HEAD
+                <div id="bottleContainer">
+                  {bottles &&
+                    bottles.map(bottle_x => {
+                      let delay =
+                        this.state.bottles.indexOf(bottle_x) >= 200
+                          ? 200 - this.state.level
+                          : this.state.bottles.indexOf(bottle_x) -
+                            this.state.level;
+                      return (
+                        <div
+                          onAnimationEnd={() =>
+                            this.fallenHandler(
+                              this.state.bottles.indexOf(bottle_x)
+                            )
+                          }
+                          key={this.state.bottles.indexOf(bottle_x)}
+                          id={this.state.bottles.indexOf(bottle_x)}
+                          className="fallingItem"
+                          style={{
+                            left: `${bottle_x}px`,
+                            animationDelay: `${delay}s`,
+                            animationDuration: `${2 - this.state.level}s`,
+                            animationPlayState: this.state.paused
+                              ? "paused"
+                              : null
+                          }}
+                        >
+                          {" "}
+                        </div>
+                      );
+                    })}
+                </div>
                 <div id="box" style={{ left: `${this.state.position}px` }} />
-=======
-                {this.currentBottles}
-                {!this.state.paused ? (
-                  <div id="box" style={{ left: `${this.state.position}px` }} />
-                ) : null}
->>>>>>> 1eebb58a21332c77afa1c721bbd76c28d1d6daae
               </div>
             </div>
           </>
