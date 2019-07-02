@@ -11,16 +11,6 @@ class Game extends Component {
     movespeed: 70,
     last_x: 30,
     bottles: [],
-    bottles_l_1: [],
-    bottles_l_2: [],
-    bottles_l_3: [],
-    bottles_l_4: [],
-    bottles_l_5: [],
-    bottles_l_6: [],
-    bottles_l_7: [],
-    bottles_l_8: [],
-    bottles_l_9: [],
-    bottles_l_0: [],
     index: 0,
     animationName: "down",
     score: 0,
@@ -29,26 +19,7 @@ class Game extends Component {
     level: 0,
     paused: false
   };
-  currentBottles = <div> </div>;
 
-  //   createBottle = () => {
-  //     this.currentBottles =
-  //       this.state.bottles &&
-  //       this.state.bottles.map(bottle_x => {
-  //         return (
-  //           <div
-  //             key={this.state.bottles.indexOf(bottle_x)}
-  //             id={this.state.bottles.indexOf(bottle_x)}
-  //             className="bottle"
-  //             style={{
-  //               left: `${bottle_x}px`,
-  //               animationName: this.state.animationName,
-  //               animationFillMode: "forwards"
-  //             }}
-  //           />
-  //         );
-  //       });
-  //   };
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
     if (e.touches[0].clientX < this.state.box_width / 2) {
@@ -86,16 +57,6 @@ class Game extends Component {
       console.log(this.state.dev_width);
     }
     this.setState({ bottles });
-
-    // for (let i = 0; i < 10; i++) {
-    //   var bottles = [];
-    //   for (let j = 0; j < 20; j++) {
-    //     var coor_x =
-    //       (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-    //     bottles.push(coor_x);
-    //   }
-    //   this.setState({ [`bottles_l_${i}`]: bottles });
-    // }
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -131,11 +92,6 @@ class Game extends Component {
       : this.setState({ paused: true, movespeed: 0 });
     console.log(this.state);
   };
-  //   generateContent = () => {
-  //     document.getElementById("game").appendChild(
-
-  //     )
-  //   };
   fallenHandler = a => {
     this.getCoords(a);
     this.setState({
@@ -144,25 +100,6 @@ class Game extends Component {
         (Math.random() * this.state.dev_width) % (this.state.dev_width - 30)
       ]
     });
-
-    // let bottle = document.createElement("div");
-    // bottle.setAttribute("onAnimationEnd", () => this.fallenHandler(a + 20));
-    // bottle.setAttribute("id", a + 20);
-
-    //   <div
-    //     onAnimationEnd={() => this.fallenHandler(a)}
-    //     key={a}
-    //     id={a}
-    //     className="fallingItem"
-    //     style={{
-    //       left: `${(Math.random() * this.state.dev_width) %
-    //         (this.state.dev_width - 30)}px`,
-    //       animationDelay: `${a - this.state.level}s`,
-    //       animationDuration: `${2 - this.state.level}s`,
-    //       animationPlayState: this.state.paused ? "paused" : null
-    //     }}
-
-    // document.getElementById("bottleContainer").appendChild(bottle);
   };
   render() {
     if (
