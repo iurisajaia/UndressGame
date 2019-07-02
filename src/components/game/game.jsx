@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Welcome from "../welcome/welcome";
 import HeartSvg from "./heartSvg";
+import DropSound from "../../sounds/drop.mp3";
+import BreakSound from "../../sounds/break.mp3";
+import Sound from "react-sound";
 
 class Game extends Component {
   state = {
@@ -18,7 +21,9 @@ class Game extends Component {
     lose: 1,
     started: false,
     level: 0,
-    paused: false
+    paused: false,
+    soundOn: false,
+    breakSound: false
   };
 
   moveBoxWithMouse = e => {
@@ -70,10 +75,14 @@ class Game extends Component {
     var boxRight = document.getElementById("box").getBoundingClientRect().right;
 
     if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
-      this.setState({ score: this.state.score + 1 });
+      let audio = document.getElementById("audio");
+      audio.play();
+      this.setState({ score: this.state.score + 1, soundOn: true });
     }
     if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
-      this.setState({ lose: this.state.lose + 1, level: 0 });
+      let breakSound = document.getElementById("break");
+      breakSound.play();
+      this.setState({ lose: this.state.lose + 1, level: 0, breakSound: true });
     }
 
     if (this.state.score % 10 == 9) {
@@ -111,6 +120,29 @@ class Game extends Component {
     });
   };
 
+  // BreakComponent = () => {
+  //   return (
+  //     <>
+  //       <Sound
+  //         url={BreakSound}
+  //         playStatus={Sound.status.PLAYING}
+  //         onFinishedPlaying={() => this.setState({ breakSound: false })}
+  //       />
+  //     </>
+  //   );
+  // };
+  // SoundComponent = () => {
+  //   return (
+  //     <>
+  //       <Sound
+  //         url={DropSound}
+  //         playStatus={Sound.status.PLAYING}
+  //         onFinishedPlaying={() => this.setState({ soundOn: false })}
+  //       />
+  //     </>
+  //   );
+  // };
+
   render() {
     if (
       this.state.bottles.length > 0 &&
@@ -125,12 +157,23 @@ class Game extends Component {
     for (var i = 0; i < 3 - this.state.lose; i++) {
       lifes.push(i);
     }
+    // console.log(this.state.soundOn);
+    // console.log(this.state.breakSound);
     return (
       <>
         {started ? (
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
               <div className="game" id="game">
+                <audio id="audio">
+                  <source src={DropSound} />
+                </audio>
+                <audio id="break">
+                  <source src={BreakSound} />
+                </audio>
+
+                {/* {this.state.soundOn ? this.SoundComponent() : null} */}
+                {/* {this.state.breakSound ? this.BreakComponent() : null} */}
                 <div className="top-nav">
                   <div className="top-left">
                     <div>
@@ -161,7 +204,6 @@ class Game extends Component {
                     </button>
                   </div>
                 </div>
-
                 {this.state.paused ? (
                   <div className="paused-wraper">
                     <button className="button" onClick={this.pauseGame}>
@@ -169,7 +211,6 @@ class Game extends Component {
                     </button>
                   </div>
                 ) : null}
-
                 {this.state.lose == 3 ? (
                   <>
                     <div className="text-center">
@@ -180,7 +221,6 @@ class Game extends Component {
                     </div>
                   </>
                 ) : null}
-
                 {bottles &&
                   bottles.map(bottle => {
                     if (bottle) {
@@ -212,7 +252,6 @@ class Game extends Component {
                 {!this.state.paused ? (
                   <div id="box" style={{ left: `${this.state.position}px` }} />
                 ) : null}
-
                 <div id="box" style={{ left: `${this.state.position}px` }} />
               </div>
             </div>
