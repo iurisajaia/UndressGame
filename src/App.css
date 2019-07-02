@@ -64,15 +64,25 @@
   }
 }
 
+@keyframes endFall {
+  from {
+    top: 430px;
+  }
+  to {
+    top: 550px;
+  }
+}
+
 .fallingItem {
   animation: fall 2s linear;
   position: absolute;
   width: 30px;
   height: 80px;
   top: -80px;
-  background-image: url("./img/bottle.webp");
-  background-size: 300%;
+  background-image: url("./img/bottle.png");
+  background-size: 90%;
   background-position: center;
+  background-repeat: no-repeat;
 }
 button {
   position: absolute;
