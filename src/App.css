@@ -20,17 +20,9 @@
   width: 100%;
   height: 100%;
   display: block;
-  background: #1c92d2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #f2fcfe,
-    #1c92d2
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #f2fcfe,
-    #1c92d2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-image: url("./img/game-background.jpg");
+  background-size: contain;
+  background-position: center;
   position: relative;
   overflow: hidden;
 }
@@ -55,8 +47,9 @@
   /* background-image: url("./img/box.png"); */
   /* background-size: cover; */
   /* background-position: center; */
-  background: black;
+  background: #fff;
   cursor: pointer;
+  z-index: 99;
 }
 
 @keyframes fall {
@@ -213,7 +206,10 @@ button {
 .welcome-wraper {
   width: 100%;
   height: 100vh;
-  background: #333b3f;
+  background-image: url("./img/wrapper-background.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: #fff;
   margin: 0;
   padding: 0;
@@ -235,19 +231,25 @@ button {
   height: 15vh;
   text-align: center;
 }
+.svg-box {
+  border: 1px solid #000;
+  padding: 6px 7px 2px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #fff;
+}
 .menu ul li {
   margin: 35px 0;
   list-style-type: none;
 }
-.menu ul button,
-.menu ul a {
-  background: #fff;
-  border: 2px solid darkred;
-  color: black;
-  border-radius: 10px;
-  text-align: center;
-  padding: 10px 20px;
-  display: block;
-  text-decoration: none;
-  font-family: nino;
+.paused-wraper {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  z-index: 99999999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

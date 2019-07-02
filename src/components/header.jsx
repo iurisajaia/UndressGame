@@ -7,7 +7,7 @@ class Header extends Component {
     return (
       <div className="game-header">
         <NavLink to="/" exact>
-          თამაში
+          მთავარი
         </NavLink>
         <NavLink to="/ranking">ლიდერები</NavLink>
         <NavLink to="/info">წესები</NavLink>
