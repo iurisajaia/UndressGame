@@ -6,6 +6,16 @@ class Game extends Component {
     movespeed: 70,
     last_x: 30,
     bottles: [],
+    bottles_l_1: [],
+    bottles_l_2: [],
+    bottles_l_3: [],
+    bottles_l_4: [],
+    bottles_l_5: [],
+    bottles_l_6: [],
+    bottles_l_7: [],
+    bottles_l_8: [],
+    bottles_l_9: [],
+    bottles_l_0: [],
     index: 0,
     animationName: "down",
     score: 0,
@@ -37,9 +47,6 @@ class Game extends Component {
   };
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
-    // var boxWidth = (screenWidth - 700) / 2;
-
-    // this.setState({ position: e.screenX - boxWidth });
     var gameCoords = [
       document.getElementById("game").offsetLeft,
       document.getElementById("game").offsetLeft +
@@ -67,7 +74,7 @@ class Game extends Component {
     var lastx = 350;
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 20; i++) {
       var coor_x =
         Math.abs(
           lastx +
@@ -133,6 +140,7 @@ class Game extends Component {
                 <div
                   onAnimationEnd={() => {
                     this.getCoords(this.state.bottles.indexOf(bottle_x));
+                    console.log(this.state.bottles);
                   }}
                   key={this.state.bottles.indexOf(bottle_x)}
                   id={this.state.bottles.indexOf(bottle_x)}
