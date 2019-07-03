@@ -5,32 +5,32 @@ import Ranking from "./components/ranking/rank";
 import Rule from "./components/rules/rule";
 import "./App.css";
 
-import firebaseConfig from "./components/config/FirebaseConfig";
-import Firebase from "firebase";
+import firebase from "./components/config/FirebaseConfig";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    Firebase.initializeApp(firebaseConfig);
     this.state = {
       users: []
     };
   }
   componentDidMount() {
-    const db = Firebase.firestore();
-    db.collection("ranking").onSnapshot(
-      snapshot => {
-        this.setState({
-          users: snapshot.docs.map(doc => {
-            return {
-              ...doc.data(),
-              id: doc.id
-            };
-          })
-        });
-      },
-      err => console.log(err)
-    );
+    firebase
+      .firestore()
+      .collection("ranking")
+      .onSnapshot(
+        snapshot => {
+          this.setState({
+            users: snapshot.docs.map(doc => {
+              return {
+                ...doc.data(),
+                id: doc.id
+              };
+            })
+          });
+        },
+        err => console.log(err)
+      );
   }
   render() {
     console.log(this.state.users);

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import firebaseConfig from "../config/FirebaseConfig";
-import Firebase from "firebase";
+import firebase from "../config/FirebaseConfig";
 
 class SubmitForm extends Component {
   constructor(props) {
     super(props);
-    Firebase.initializeApp(firebaseConfig);
     this.state = {
       name: "",
       number: "",
@@ -22,7 +20,8 @@ class SubmitForm extends Component {
       user => user.number == this.state.number
     );
     if (user) {
-      Firebase.firestore()
+      firebase
+        .firestore()
         .collection("ranking")
         .doc(user.id)
         .set({
@@ -32,7 +31,8 @@ class SubmitForm extends Component {
         })
         .catch(err => console.log(err));
     } else {
-      Firebase.firestore()
+      firebase
+        .firestore()
         .collection("ranking")
         .add({
           name: this.state.name,
