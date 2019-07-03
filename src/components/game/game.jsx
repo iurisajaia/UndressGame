@@ -23,7 +23,17 @@ class Game extends Component {
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false
+    breakSound: false,
+    bottle1: [],
+    bottle2: [],
+    bottle3: [],
+    bottle4: [],
+    bottle5: [],
+    bottle6: [],
+    bottle7: [],
+    bottle8: [],
+    bottle9: [],
+    bottle0: []
   };
 
   moveBoxWithMouse = e => {
@@ -62,9 +72,22 @@ class Game extends Component {
       bottles.push({
         coor_x: coor_x,
         id: i,
-        speed: Math.floor((i / 20) * Math.abs(Math.random() * 2)) + 20
+        speed:
+          Math.floor(i / 20) +
+          8 +
+          Math.abs(Math.random() * (Math.floor(i / 20 + 8) / 5)),
+        delay:
+          (bottles.length &&
+            (20 / bottles[bottles.length - 1].speed) *
+              (0.4 + Math.random() * 0.2) +
+              bottles[bottles.length - 1].delay) ||
+          1
       });
-      console.log(this.state.dev_width);
+      // console.log(
+      //   Math.floor(i / 20) +
+      //     8 +
+      //     Math.abs(Math.random() * (Math.floor(i / 20 + 8) / 5))
+      // );
     }
     this.setState({ bottles });
   }
@@ -110,6 +133,10 @@ class Game extends Component {
     this.getCoords(a);
     let temp = this.state.bottles;
     temp[a] = "";
+    let speed =
+      Math.floor(temp.length / 20) +
+      8 +
+      Math.abs(Math.random() * (Math.floor(temp.length / 20 + 8) / 5));
     this.setState({
       bottles: [
         ...temp,
@@ -118,11 +145,39 @@ class Game extends Component {
             (Math.random() * this.state.dev_width) %
             (this.state.dev_width - 30),
           id: temp.length,
-          speed:
-            Math.floor((temp.length / 20) * Math.abs(Math.random() * 2)) + 20
+          speed: speed,
+          delay:
+            (temp.length &&
+              temp[temp.length - 1].delay *
+                (speed / temp[temp.length - 1].speed)) ||
+            1
         }
       ]
     });
+  };
+
+  handleAnimationStart = a => {
+    setInterval(() => {
+      if (document.getElementById(a) && !this.state.paused) {
+        let elem = document.getElementById(a).getBoundingClientRect();
+        this.setState({
+          [`bottle${a % 10}`]: [elem.top, elem.right, elem.bottom, elem.left]
+        });
+        if (
+          elem.left <
+            document.getElementById("box").getBoundingClientRect().right &&
+          elem.left >
+            document.getElementById("box").getBoundingClientRect().left - 30 &&
+          elem.bottom >
+            document.getElementById("box").getBoundingClientRect().top
+        ) {
+          console.log("caught");
+          let temp = this.state.bottles;
+          temp[a] = "";
+          this.setState({ bottles: [...temp] });
+        }
+      }
+    }, 100);
   };
 
   // BreakComponent = () => {
@@ -149,6 +204,17 @@ class Game extends Component {
   // };
 
   render() {
+    console
+      .log
+      // document.getElementById("box") &&
+      //   document.getElementById("box").getBoundingClientRect().top,
+      // this.state.box_height,
+      // this.state.bottle0,
+      // this.state.bottle1,
+      // this.state.bottle2,
+      // this.state.bottle3
+      ();
+
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -229,20 +295,19 @@ class Game extends Component {
                 {bottles &&
                   bottles.map(bottle => {
                     if (bottle) {
-                      let delay =
-                        bottle.id < 10
-                          ? bottle.id - this.state.level
-                          : 8 - this.state.level;
                       return (
                         <div
+                          onAnimationStart={() => {
+                            this.handleAnimationStart(bottle.id);
+                          }}
                           onAnimationEnd={() => this.fallenHandler(bottle.id)}
                           key={bottle.id}
                           id={bottle.id}
                           className="fallingItem"
                           style={{
                             left: `${bottle.coor_x}px`,
-                            animationDelay: `${delay}s`,
-                            animationDuration: `${40 / bottle.speed}s`,
+                            animationDelay: `${bottle.delay}s`,
+                            animationDuration: `${20 / bottle.speed}s`,
                             animationPlayState: this.state.paused
                               ? "paused"
                               : null
