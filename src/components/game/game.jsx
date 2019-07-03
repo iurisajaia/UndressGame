@@ -15,28 +15,15 @@ class Game extends Component {
     box_width: "",
     box_height: "",
     position: 0,
-    movespeed: 70,
-    last_x: 30,
     bottles: [],
     index: 0,
-    animationName: "down",
     score: 0,
     lose: 1,
     started: false,
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false,
-    bottle1: [],
-    bottle2: [],
-    bottle3: [],
-    bottle4: [],
-    bottle5: [],
-    bottle6: [],
-    bottle7: [],
-    bottle8: [],
-    bottle9: [],
-    bottle0: []
+    breakSound: false
   };
 
   moveBoxWithMouse = e => {
@@ -49,15 +36,6 @@ class Game extends Component {
       this.setState({
         position: e.touches[0].clientX - this.state.box_width / 2
       });
-    }
-  };
-  moveBox = e => {
-    if (e.keyCode == 37) {
-      var left = this.state.position - this.state.movespeed;
-      this.setState({ position: left });
-    } else if (e.keyCode == 39) {
-      var left = this.state.position + this.state.movespeed;
-      this.setState({ position: left });
     }
   };
   componentDidMount() {
@@ -86,39 +64,12 @@ class Game extends Component {
               bottles[bottles.length - 1].delay) ||
           1
       });
-      // console.log(
-      //   Math.floor(i / 20) +
-      //     8 +
-      //     Math.abs(Math.random() * (Math.floor(i / 20 + 8) / 5))
-      // );
     }
     this.setState({ bottles });
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
-  getCoords = a => {
-    var bottleLeft = document.getElementById(a).getBoundingClientRect().left;
-    var bottleRight = document.getElementById(a).getBoundingClientRect().right;
-
-    var boxLeft = document.getElementById("box").getBoundingClientRect().left;
-    var boxRight = document.getElementById("box").getBoundingClientRect().right;
-
-    if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
-      let audio = document.getElementById("audio");
-      audio.play();
-      this.setState({ score: this.state.score + 1, soundOn: true });
-    }
-    if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
-      let breakSound = document.getElementById("break");
-      breakSound.play();
-      this.setState({ lose: this.state.lose + 1, level: 0, breakSound: true });
-    }
-
-    if (this.state.score % 10 == 9) {
-      this.setState({ level: this.state.level + 0.085 });
-    }
-  };
   startGame = () => {
     this.setState({ lose: 0, score: 0, started: true, paused: false });
   };
@@ -128,36 +79,10 @@ class Game extends Component {
   };
   pauseGame = () => {
     this.state.paused
-      ? this.setState({ paused: false, movespeed: 10 })
-      : this.setState({ paused: true, movespeed: 0 });
+      ? this.setState({ paused: false })
+      : this.setState({ paused: true });
     console.log(this.state);
   };
-  // fallenHandler = a => {
-  //   this.getCoords(a);
-  //   let temp = this.state.bottles;
-  //   temp[a] = "";
-  //   let speed =
-  //     Math.floor(temp.length / 20) +
-  //     8 +
-  //     Math.abs(Math.random() * (Math.floor(temp.length / 20 + 8) / 5));
-  //   this.setState({
-  //     bottles: [
-  //       ...temp,
-  //       {
-  //         coor_x:
-  //           (Math.random() * this.state.dev_width) %
-  //           (this.state.dev_width - 30),
-  //         id: temp.length,
-  //         speed: speed,
-  //         delay:
-  //           (temp.length &&
-  //             temp[temp.length - 1].delay *
-  //               (speed / temp[temp.length - 1].speed)) ||
-  //           1
-  //       }
-  //     ]
-  //   });
-  // };
   fallen = a => {
     let temp = this.state.bottles;
     temp[a] = "";
@@ -192,14 +117,10 @@ class Game extends Component {
           [`bottle${a % 10}`]: [elem.top, elem.right, elem.bottom, elem.left]
         });
         if (
-          elem.left <
-            document.getElementById("box").getBoundingClientRect().right &&
-          elem.left >
-            document.getElementById("box").getBoundingClientRect().left - 30 &&
-          elem.bottom >
-            document.getElementById("box").getBoundingClientRect().top
+          elem.left < this.state.position + this.state.box_width &&
+          elem.left > this.state.position - 30 &&
+          elem.bottom > this.state.dev_height - this.state.box_height
         ) {
-          console.log("caught");
           let audio = document.getElementById("audio");
           audio.play();
           this.setState({ score: this.state.score + 1, soundOn: true });
@@ -218,41 +139,7 @@ class Game extends Component {
     }, 20);
   };
 
-  // BreakComponent = () => {
-  //   return (
-  //     <>
-  //       <Sound
-  //         url={BreakSound}
-  //         playStatus={Sound.status.PLAYING}
-  //         onFinishedPlaying={() => this.setState({ breakSound: false })}
-  //       />
-  //     </>
-  //   );
-  // };
-  // SoundComponent = () => {
-  //   return (
-  //     <>
-  //       <Sound
-  //         url={DropSound}
-  //         playStatus={Sound.status.PLAYING}
-  //         onFinishedPlaying={() => this.setState({ soundOn: false })}
-  //       />
-  //     </>
-  //   );
-  // };
-
   render() {
-    console
-      .log
-      // document.getElementById("box") &&
-      //   document.getElementById("box").getBoundingClientRect().top,
-      // this.state.box_height,
-      // this.state.bottle0,
-      // this.state.bottle1,
-      // this.state.bottle2,
-      // this.state.bottle3
-      ();
-
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -266,8 +153,6 @@ class Game extends Component {
     for (var i = 0; i < 3 - this.state.lose; i++) {
       lifes.push(i);
     }
-    // console.log(this.state.soundOn);
-    // console.log(this.state.breakSound);
     return (
       <>
         {started ? (
@@ -280,9 +165,6 @@ class Game extends Component {
                 <audio id="break">
                   <source src={BreakSound} />
                 </audio>
-
-                {/* {this.state.soundOn ? this.SoundComponent() : null} */}
-                {/* {this.state.breakSound ? this.BreakComponent() : null} */}
                 <div className="top-nav">
                   <div className="top-left">
                     <div>
@@ -335,7 +217,6 @@ class Game extends Component {
                           onAnimationStart={() => {
                             this.handleAnimationStart(bottle.id);
                           }}
-                          onAnimationEnd={() => this.fallenHandler(bottle.id)}
                           key={bottle.id}
                           id={bottle.id}
                           className="fallingItem"
