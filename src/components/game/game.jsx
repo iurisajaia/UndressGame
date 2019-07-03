@@ -131,8 +131,33 @@ class Game extends Component {
       : this.setState({ paused: true, movespeed: 0 });
     console.log(this.state);
   };
-  fallenHandler = a => {
-    this.getCoords(a);
+  // fallenHandler = a => {
+  //   this.getCoords(a);
+  //   let temp = this.state.bottles;
+  //   temp[a] = "";
+  //   let speed =
+  //     Math.floor(temp.length / 20) +
+  //     8 +
+  //     Math.abs(Math.random() * (Math.floor(temp.length / 20 + 8) / 5));
+  //   this.setState({
+  //     bottles: [
+  //       ...temp,
+  //       {
+  //         coor_x:
+  //           (Math.random() * this.state.dev_width) %
+  //           (this.state.dev_width - 30),
+  //         id: temp.length,
+  //         speed: speed,
+  //         delay:
+  //           (temp.length &&
+  //             temp[temp.length - 1].delay *
+  //               (speed / temp[temp.length - 1].speed)) ||
+  //           1
+  //       }
+  //     ]
+  //   });
+  // };
+  fallen = a => {
     let temp = this.state.bottles;
     temp[a] = "";
     let speed =
@@ -174,12 +199,22 @@ class Game extends Component {
             document.getElementById("box").getBoundingClientRect().top
         ) {
           console.log("caught");
-          let temp = this.state.bottles;
-          temp[a] = "";
-          this.setState({ bottles: [...temp] });
+          let audio = document.getElementById("audio");
+          audio.play();
+          this.setState({ score: this.state.score + 1, soundOn: true });
+          this.fallen(a);
+        } else if (elem.bottom >= this.state.dev_height) {
+          let breakSound = document.getElementById("break");
+          breakSound.play();
+          this.setState({
+            lose: this.state.lose + 1,
+            level: 0,
+            breakSound: true
+          });
+          this.fallen(a);
         }
       }
-    }, 100);
+    }, 20);
   };
 
   // BreakComponent = () => {
