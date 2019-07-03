@@ -6,6 +6,7 @@ import BreakSound from "../../sounds/break.mp3";
 import HouseSvg from "./houseSvg";
 import PauseSvg from "./pauseSvg";
 import PlaySvg from "./playSvg";
+import SubmitForm from "../submitScore/SubmitForm";
 
 class Game extends Component {
   state = {
@@ -202,28 +203,11 @@ class Game extends Component {
                   </div>
                 ) : null}
                 {this.state.lose == 3 ? (
-                  <>
-                    <div className="text-center">
-                      <form>
-                        <input type="text" placeholder="სახელი" />
-                        <br />
-                        <input type="text" placeholder="ნომერი" /> <br />
-                        <input
-                          type="hidden"
-                          name="score"
-                          value={this.state.score * 100}
-                        />
-                        <span className="your-score">
-                          შენი ქულა : {this.state.score * 100}
-                        </span>{" "}
-                        <br />
-                        <button>გაგზავნა</button>
-                      </form>
-                      <button className="button" onClick={this.startGame}>
-                        კიდევ სცადე
-                      </button>
-                    </div>
-                  </>
+                  <SubmitForm
+                    users={this.props.users}
+                    score={this.state.score}
+                    startGame={this.startGamef}
+                  />
                 ) : null}
                 {bottles &&
                   bottles.map(bottle => {
