@@ -16,7 +16,7 @@ class Game extends Component {
     box_height: "",
     position: 0,
     bottles: [],
-    index: 0,
+    // index: 0,
     score: 0,
     lose: 1,
     started: false,
