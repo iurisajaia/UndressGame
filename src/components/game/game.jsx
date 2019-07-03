@@ -3,7 +3,9 @@ import Welcome from "../welcome/welcome";
 import HeartSvg from "./heartSvg";
 import DropSound from "../../sounds/drop.mp3";
 import BreakSound from "../../sounds/break.mp3";
-import Sound from "react-sound";
+import HouseSvg from "./houseSvg";
+import PauseSvg from "./pauseSvg";
+import PlaySvg from "./playSvg";
 
 class Game extends Component {
   state = {
@@ -196,27 +198,41 @@ class Game extends Component {
 
                   <div className="top-right">
                     <button className="button" onClick={this.stopGame}>
-                      Home
+                      <HouseSvg />
                     </button>
 
                     <button className="button" onClick={this.pauseGame}>
-                      Pause
+                      <PauseSvg />
                     </button>
                   </div>
                 </div>
                 {this.state.paused ? (
                   <div className="paused-wraper">
                     <button className="button" onClick={this.pauseGame}>
-                      Resume
+                      <PlaySvg />
                     </button>
                   </div>
                 ) : null}
                 {this.state.lose == 3 ? (
                   <>
                     <div className="text-center">
-                      <h2>You Lose</h2>
+                      <form>
+                        <input type="text" placeholder="სახელი" />
+                        <br />
+                        <input type="text" placeholder="ნომერი" /> <br />
+                        <input
+                          type="hidden"
+                          name="score"
+                          value={this.state.score * 100}
+                        />
+                        <span className="your-score">
+                          შენი ქულა : {this.state.score * 100}
+                        </span>{" "}
+                        <br />
+                        <button>გაგზავნა</button>
+                      </form>
                       <button className="button" onClick={this.startGame}>
-                        Play Again
+                        კიდევ სცადე
                       </button>
                     </div>
                   </>
@@ -252,7 +268,9 @@ class Game extends Component {
                 {!this.state.paused ? (
                   <div id="box" style={{ left: `${this.state.position}px` }} />
                 ) : null}
-                <div id="box" style={{ left: `${this.state.position}px` }} />
+                {!this.state.paused ? (
+                  <div id="box" style={{ left: `${this.state.position}px` }} />
+                ) : null}
               </div>
             </div>
           </>

@@ -51,6 +51,10 @@ code {
   top: 6px;
   text-shadow: 0 -2px 0 #7fbb98, 0 1px 1px #c2dece, 0 0 4px white;
   color: white;
+  outline: none;
+}
+.button:focus {
+  outline: none;
 }
 .button:active:before {
   top: 0;
