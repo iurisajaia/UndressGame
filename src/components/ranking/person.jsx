@@ -8,8 +8,8 @@ class Person extends Component {
         <div className="ranking-box">
           <div className="rank">1.</div>
           <div className="person">
-            <span className="name">John Doe</span>
-            <span className="point">15 000</span>
+            <span className="name">{this.props.name}</span>
+            <span className="point">{this.props.score}</span>
           </div>
           <div className="medal">
             <MedalSvg />
