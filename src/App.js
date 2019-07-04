@@ -12,7 +12,8 @@ class App extends Component {
     super(props);
     this.state = {
       users: [],
-      sound: true
+      sound: true,
+      template: 0
     };
   }
   componentDidMount() {
@@ -51,6 +52,7 @@ class App extends Component {
                 changeSound={this.changeSound}
                 sound={this.state.sound}
                 users={this.state.users}
+                template={this.state.template}
               />
             )}
             path="/"

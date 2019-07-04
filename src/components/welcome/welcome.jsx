@@ -15,7 +15,6 @@ class Welcome extends Component {
     this.props.changeSound();
   };
   render() {
-    console.log("welcome", this.state.sound);
     return (
       <>
         <div className="welcome-wraper">
@@ -44,10 +43,10 @@ class Welcome extends Component {
                 <MuteSvg />{" "}
               </div>
             ) : (
-              <div className="svg-box" onClick={this.changeVolume}>
-                <MusicSvg />
-              </div>
-            )}
+                <div className="svg-box" onClick={this.changeVolume}>
+                  <MusicSvg />
+                </div>
+              )}
           </div>
         </div>
       </>
