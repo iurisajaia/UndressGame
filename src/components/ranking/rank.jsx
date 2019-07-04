@@ -9,20 +9,12 @@ class Rank extends Component {
       <>
         <Header />
         <ul className="ranking-list">
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
-          <Person />
+          {this.props.users &&
+            this.props.users.map((user, i) => {
+              return (
+                <Person key={user.id} i={i} name={user.name} score={user.score} />
+              );
+            })}
         </ul>
       </>
     );

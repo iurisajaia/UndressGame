@@ -6,6 +6,7 @@ import BreakSound from "../../sounds/break.mp3";
 import HouseSvg from "./houseSvg";
 import PauseSvg from "./pauseSvg";
 import PlaySvg from "./playSvg";
+import SubmitForm from "../submitScore/SubmitForm";
 
 class Game extends Component {
   state = {
@@ -14,18 +15,14 @@ class Game extends Component {
     box_width: "",
     box_height: "",
     position: 0,
-    movespeed: 70,
-    last_x: 30,
     bottles: [],
     index: 0,
-    animationName: "down",
     score: 0,
     lose: 0,
     started: false,
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false,
     currentTime: 0.0
   };
 
@@ -39,15 +36,6 @@ class Game extends Component {
       this.setState({
         position: e.touches[0].clientX - this.state.box_width / 2
       });
-    }
-  };
-  moveBox = e => {
-    if (e.keyCode == 37) {
-      var left = this.state.position - this.state.movespeed;
-      this.setState({ position: left });
-    } else if (e.keyCode == 39) {
-      var left = this.state.position + this.state.movespeed;
-      this.setState({ position: left });
     }
   };
   componentDidMount() {
@@ -65,7 +53,16 @@ class Game extends Component {
       bottles.push({
         coor_x: coor_x,
         id: i,
-        speed: Math.floor((i / 20) * Math.abs(Math.random() * 2)) + 20
+        speed:
+          Math.floor(i / 20) +
+          8 +
+          Math.abs(Math.random() * (Math.floor(i / 20 + 8) / 5)),
+        delay:
+          (bottles.length &&
+            (20 / bottles[bottles.length - 1].speed) *
+              (0.4 + Math.random() * 0.2) +
+              bottles[bottles.length - 1].delay) ||
+          1
       });
     }
     this.setState({ bottles });
@@ -73,39 +70,6 @@ class Game extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
-  getCoords = a => {
-    var bottleLeft = document.getElementById(a).getBoundingClientRect().left;
-    var bottleRight = document.getElementById(a).getBoundingClientRect().right;
-
-    var boxLeft = document.getElementById("box").getBoundingClientRect().left;
-    var boxRight = document.getElementById("box").getBoundingClientRect().right;
-
-    if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
-      let audio = document.getElementById("audio");
-      audio.play();
-      this.setState({
-        score: this.state.score + 1,
-        soundOn: true,
-        currentTime: 0.0
-      });
-      audio.currentTime = this.state.currentTime;
-    }
-    if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
-      let breakSound = document.getElementById("break");
-      breakSound.play();
-      this.setState({
-        lose: this.state.lose + 1,
-        level: 0,
-        breakSound: true,
-        currentTime: 0.0
-      });
-      breakSound.currentTime = this.state.currentTime;
-    }
-
-    if (this.state.score % 10 == 9) {
-      this.setState({ level: this.state.level + 0.085 });
-    }
-  };
   startGame = () => {
     this.setState({ lose: 0, score: 0, started: true, paused: false });
   };
@@ -115,13 +79,17 @@ class Game extends Component {
   };
   pauseGame = () => {
     this.state.paused
-      ? this.setState({ paused: false, movespeed: 10 })
-      : this.setState({ paused: true, movespeed: 0 });
+      ? this.setState({ paused: false })
+      : this.setState({ paused: true });
+    console.log(this.state);
   };
-  fallenHandler = a => {
-    this.getCoords(a);
+  fallen = a => {
     let temp = this.state.bottles;
     temp[a] = "";
+    let speed =
+      Math.floor(temp.length / 20) +
+      8 +
+      Math.abs(Math.random() * (Math.floor(temp.length / 20 + 8) / 5));
     this.setState({
       bottles: [
         ...temp,
@@ -130,11 +98,52 @@ class Game extends Component {
             (Math.random() * this.state.dev_width) %
             (this.state.dev_width - 30),
           id: temp.length,
-          speed:
-            Math.floor((temp.length / 20) * Math.abs(Math.random() * 2)) + 20
+          speed: speed,
+          delay:
+            (temp.length &&
+              temp[temp.length - 1].delay *
+                (speed / temp[temp.length - 1].speed)) ||
+            1
         }
       ]
     });
+  };
+
+  handleAnimationStart = a => {
+    setInterval(() => {
+      if (document.getElementById(a) && !this.state.paused) {
+        let elem = document.getElementById(a).getBoundingClientRect();
+        this.setState({
+          [`bottle${a % 10}`]: [elem.top, elem.right, elem.bottom, elem.left]
+        });
+        if (
+          elem.left < this.state.position + this.state.box_width &&
+          elem.left > this.state.position - 30 &&
+          elem.bottom > this.state.dev_height - this.state.box_height
+        ) {
+          let audio = document.getElementById("audio");
+          audio.play();
+          this.setState({
+            score: this.state.score + 1,
+            soundOn: true,
+            currentTime: 0.0
+          });
+          audio.currentTime = this.state.currentTime;
+          this.fallen(a);
+        } else if (elem.bottom >= this.state.dev_height) {
+          let breakSound = document.getElementById("break");
+          breakSound.play();
+          this.setState({
+            lose: this.state.lose + 1,
+            level: 0,
+            currentTime: 0.0
+          });
+          breakSound.currentTime = this.state.currentTime;
+
+          this.fallen(a);
+        }
+      }
+    }, 20);
   };
 
   render() {
@@ -201,46 +210,27 @@ class Game extends Component {
                   </div>
                 ) : null}
                 {this.state.lose == 3 ? (
-                  <>
-                    <div className="text-center">
-                      <form>
-                        <input type="text" placeholder="სახელი" />
-                        <br />
-                        <input type="text" placeholder="ნომერი" /> <br />
-                        <input
-                          type="hidden"
-                          name="score"
-                          value={this.state.score * 100}
-                        />
-                        <span className="your-score">
-                          შენი ქულა : {this.state.score * 100}
-                        </span>{" "}
-                        <br />
-                        <button>გაგზავნა</button>
-                      </form>
-                      <button className="button" onClick={this.startGame}>
-                        კიდევ სცადე
-                      </button>
-                    </div>
-                  </>
+                  <SubmitForm
+                    users={this.props.users}
+                    score={this.state.score}
+                    startGame={this.startGamef}
+                  />
                 ) : null}
                 {bottles &&
                   bottles.map(bottle => {
                     if (bottle) {
-                      let delay =
-                        bottle.id < 10
-                          ? bottle.id - this.state.level
-                          : 8 - this.state.level;
                       return (
                         <div
-                          onAnimationEnd={() => this.fallenHandler(bottle.id)}
+                          onAnimationStart={() => {
+                            this.handleAnimationStart(bottle.id);
+                          }}
                           key={bottle.id}
                           id={bottle.id}
                           className="fallingItem"
                           style={{
                             left: `${bottle.coor_x}px`,
-                            animationDelay: `${delay}s`,
-                            animationDuration: `${40 / bottle.speed}s`,
+                            animationDelay: `${bottle.delay}s`,
+                            animationDuration: `${20 / bottle.speed}s`,
                             animationPlayState: this.state.paused
                               ? "paused"
                               : null

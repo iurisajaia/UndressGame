@@ -50,13 +50,17 @@
 }
 
 @keyframes fall {
+  from {
+    top: -30px;
+  }
   to {
-    top: Calc(100vh - 100vw * 3 / 16);
+    top: Calc(100vh - 30px);
   }
 }
 
 .fallingItem {
   animation: fall 2s linear;
+  animation-timing-function: linear;
   position: absolute;
   width: 30px;
   height: 80px;
