@@ -255,10 +255,6 @@ class Game extends Component {
                       );
                     }
                   })}
-                {this.currentBottles}
-                {!this.state.paused ? (
-                  <div id="box" style={{ left: `${this.state.position}px` }} />
-                ) : null}
                 {!this.state.paused ? (
                   <div id="box" style={{ left: `${this.state.position}px` }} />
                 ) : null}
