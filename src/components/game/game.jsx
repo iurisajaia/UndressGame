@@ -20,12 +20,13 @@ class Game extends Component {
     index: 0,
     animationName: "down",
     score: 0,
-    lose: 1,
+    lose: 0,
     started: false,
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false
+    breakSound: false,
+    currentTime: 0.0
   };
 
   moveBoxWithMouse = e => {
@@ -66,7 +67,6 @@ class Game extends Component {
         id: i,
         speed: Math.floor((i / 20) * Math.abs(Math.random() * 2)) + 20
       });
-      console.log(this.state.dev_width);
     }
     this.setState({ bottles });
   }
@@ -83,12 +83,23 @@ class Game extends Component {
     if (bottleLeft >= boxLeft - 25 && bottleRight <= boxRight + 25) {
       let audio = document.getElementById("audio");
       audio.play();
-      this.setState({ score: this.state.score + 1, soundOn: true });
+      this.setState({
+        score: this.state.score + 1,
+        soundOn: true,
+        currentTime: 0.0
+      });
+      audio.currentTime = this.state.currentTime;
     }
     if (bottleLeft <= boxLeft - 25 || bottleRight >= boxRight + 25) {
       let breakSound = document.getElementById("break");
       breakSound.play();
-      this.setState({ lose: this.state.lose + 1, level: 0, breakSound: true });
+      this.setState({
+        lose: this.state.lose + 1,
+        level: 0,
+        breakSound: true,
+        currentTime: 0.0
+      });
+      breakSound.currentTime = this.state.currentTime;
     }
 
     if (this.state.score % 10 == 9) {
@@ -106,7 +117,6 @@ class Game extends Component {
     this.state.paused
       ? this.setState({ paused: false, movespeed: 10 })
       : this.setState({ paused: true, movespeed: 0 });
-    console.log(this.state);
   };
   fallenHandler = a => {
     this.getCoords(a);
@@ -127,29 +137,6 @@ class Game extends Component {
     });
   };
 
-  // BreakComponent = () => {
-  //   return (
-  //     <>
-  //       <Sound
-  //         url={BreakSound}
-  //         playStatus={Sound.status.PLAYING}
-  //         onFinishedPlaying={() => this.setState({ breakSound: false })}
-  //       />
-  //     </>
-  //   );
-  // };
-  // SoundComponent = () => {
-  //   return (
-  //     <>
-  //       <Sound
-  //         url={DropSound}
-  //         playStatus={Sound.status.PLAYING}
-  //         onFinishedPlaying={() => this.setState({ soundOn: false })}
-  //       />
-  //     </>
-  //   );
-  // };
-
   render() {
     if (
       this.state.bottles.length > 0 &&
@@ -164,8 +151,6 @@ class Game extends Component {
     for (var i = 0; i < 3 - this.state.lose; i++) {
       lifes.push(i);
     }
-    // console.log(this.state.soundOn);
-    // console.log(this.state.breakSound);
     return (
       <>
         {started ? (
@@ -178,9 +163,6 @@ class Game extends Component {
                 <audio id="break">
                   <source src={BreakSound} />
                 </audio>
-
-                {/* {this.state.soundOn ? this.SoundComponent() : null} */}
-                {/* {this.state.breakSound ? this.BreakComponent() : null} */}
                 <div className="top-nav">
                   <div className="top-left">
                     <div>
