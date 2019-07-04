@@ -10,9 +10,9 @@ class Rank extends Component {
         <Header />
         <ul className="ranking-list">
           {this.props.users &&
-            this.props.users.map(user => {
+            this.props.users.map((user, i) => {
               return (
-                <Person key={user.id} name={user.name} score={user.score} />
+                <Person key={user.id} i={i} name={user.name} score={user.score} />
               );
             })}
         </ul>

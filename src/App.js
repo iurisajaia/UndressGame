@@ -11,7 +11,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: []
+      users: [],
+      sound: true
     };
   }
   componentDidMount() {
@@ -21,24 +22,37 @@ class App extends Component {
       .onSnapshot(
         snapshot => {
           this.setState({
-            users: snapshot.docs.map(doc => {
-              return {
-                ...doc.data(),
-                id: doc.id
-              };
-            })
+            users: snapshot.docs
+              .map(doc => {
+                return {
+                  ...doc.data(),
+                  id: doc.id
+                };
+              })
+              .sort((user1, user2) => {
+                return Number(user2.score) - Number(user1.score);
+              })
           });
         },
         err => console.log(err)
       );
   }
+  changeSound = () => {
+    this.setState({ sound: this.state.sound ? false : true });
+  };
   render() {
-    console.log(this.state.users);
     return (
       <>
         <Router>
           <Route
-            render={props => <Game {...props} users={this.state.users} />}
+            render={props => (
+              <Game
+                {...props}
+                changeSound={this.changeSound}
+                sound={this.state.sound}
+                users={this.state.users}
+              />
+            )}
             path="/"
             exact
           />

@@ -18,12 +18,12 @@ class Game extends Component {
     bottles: [],
     intervals: [],
     score: 0,
-    lose: 1,
+    lose: 0,
     started: false,
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false
+    currentTime: 0.0
   };
 
   moveBoxWithMouse = e => {
@@ -38,6 +38,7 @@ class Game extends Component {
       });
     }
   };
+
   componentDidMount() {
     this.setState({
       dev_width: window.innerWidth,
@@ -64,9 +65,11 @@ class Game extends Component {
     }
     this.setState({ bottles, intervals });
   }
+
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
   }
+
   startGame = () => {
     this.setState({ lose: 0, score: 0, started: true, paused: false });
   };
@@ -74,12 +77,14 @@ class Game extends Component {
   stopGame = () => {
     this.setState({ lose: 0, score: 0, started: false });
   };
+
   pauseGame = () => {
     this.state.paused
       ? this.setState({ paused: false })
       : this.setState({ paused: true });
     console.log(this.state);
   };
+
   fallen = a => {
     let temp = this.state.bottles;
     let minSpeedOfLevel = Math.floor(temp.length / 10) + 16;
@@ -118,18 +123,31 @@ class Game extends Component {
           elem.left > this.state.position - 30 &&
           elem.bottom > this.state.dev_height - this.state.box_height
         ) {
-          let audio = document.getElementById("audio");
-          audio.play();
-          this.setState({ score: this.state.score + 1, soundOn: true });
+          if (this.props.sound) {
+            let audio = document.getElementById("audio");
+            audio.play();
+            audio.currentTime = this.state.currentTime;
+          }
+
+          this.setState({
+            score: this.state.score + 1,
+            soundOn: true,
+            currentTime: 0.0
+          });
+
           this.fallen(a);
         } else if (elem.bottom >= this.state.dev_height) {
-          let breakSound = document.getElementById("break");
-          breakSound.play();
+          if (this.props.sound) {
+            let breakSound = document.getElementById("break");
+            breakSound.play();
+            breakSound.currentTime = this.state.currentTime;
+          }
           this.setState({
             lose: this.state.lose + 1,
             level: 0,
-            breakSound: true
+            currentTime: 0.0
           });
+
           this.fallen(a);
         }
       }
@@ -137,12 +155,7 @@ class Game extends Component {
   };
 
   render() {
-    console.log(
-      "bottles",
-      this.state.bottles,
-      "intervals \n",
-      this.state.intervals
-    );
+    console.log("game", this.props.sound);
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -162,12 +175,17 @@ class Game extends Component {
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
               <div className="game" id="game">
-                <audio id="audio">
-                  <source src={DropSound} />
-                </audio>
-                <audio id="break">
-                  <source src={BreakSound} />
-                </audio>
+                {this.props.sound ? (
+                  <>
+                    <audio id="audio">
+                      <source src={DropSound} />
+                    </audio>
+                    <audio id="break">
+                      <source src={BreakSound} />
+                    </audio>
+                  </>
+                ) : null}
+
                 <div className="top-nav">
                   <div className="top-left">
                     <div>
@@ -248,7 +266,11 @@ class Game extends Component {
             </div>
           </>
         ) : (
-          <Welcome startGame={this.startGame} />
+          <Welcome
+            changeSound={this.props.changeSound}
+            sound={this.props.sound}
+            startGame={this.startGame}
+          />
         )}
       </>
     );
