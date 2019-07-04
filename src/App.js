@@ -22,12 +22,16 @@ class App extends Component {
       .onSnapshot(
         snapshot => {
           this.setState({
-            users: snapshot.docs.map(doc => {
-              return {
-                ...doc.data(),
-                id: doc.id
-              };
-            })
+            users: snapshot.docs
+              .map(doc => {
+                return {
+                  ...doc.data(),
+                  id: doc.id
+                };
+              })
+              .sort((user1, user2) => {
+                return Number(user2.score) - Number(user1.score);
+              })
           });
         },
         err => console.log(err)
@@ -37,7 +41,6 @@ class App extends Component {
     this.setState({ sound: this.state.sound ? false : true });
   };
   render() {
-    console.log("app", this.state.sound);
     return (
       <>
         <Router>
