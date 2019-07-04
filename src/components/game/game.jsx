@@ -52,8 +52,8 @@ class Game extends Component {
     for (let i = 0; i < 10; i++) {
       var coor_x =
         (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
-      let minSpeedOfLevel = Math.floor(i / 10) + 16;
-      let time = 40 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
+      let minSpeedOfLevel = Math.floor(i / 10) + 20;
+      let time = 65 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
       let delay = i * 0.9;
       intervals.push(delay);
       bottles.push({
@@ -87,8 +87,8 @@ class Game extends Component {
 
   fallen = a => {
     let temp = this.state.bottles;
-    let minSpeedOfLevel = Math.floor(temp.length / 10) + 16;
-    let time = 40 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
+    let minSpeedOfLevel = Math.floor(temp.length / 10) + 20;
+    let time = 65 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
     let intervals = this.state.intervals;
     let desiredInterval =
       intervals[intervals.length - 1] +
