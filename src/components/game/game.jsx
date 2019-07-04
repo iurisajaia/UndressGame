@@ -18,12 +18,12 @@ class Game extends Component {
     bottles: [],
     index: 0,
     score: 0,
-    lose: 1,
+    lose: 0,
     started: false,
     level: 0,
     paused: false,
     soundOn: false,
-    breakSound: false
+    currentTime: 0.0
   };
 
   moveBoxWithMouse = e => {
@@ -123,7 +123,12 @@ class Game extends Component {
         ) {
           let audio = document.getElementById("audio");
           audio.play();
-          this.setState({ score: this.state.score + 1, soundOn: true });
+          this.setState({
+            score: this.state.score + 1,
+            soundOn: true,
+            currentTime: 0.0
+          });
+          audio.currentTime = this.state.currentTime;
           this.fallen(a);
         } else if (elem.bottom >= this.state.dev_height) {
           let breakSound = document.getElementById("break");
@@ -131,8 +136,10 @@ class Game extends Component {
           this.setState({
             lose: this.state.lose + 1,
             level: 0,
-            breakSound: true
+            currentTime: 0.0
           });
+          breakSound.currentTime = this.state.currentTime;
+
           this.fallen(a);
         }
       }

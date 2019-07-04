@@ -20,9 +20,9 @@ class Welcome extends Component {
           <div className="menu">
             <ul>
               <li>
-                <Link className="button" onClick={this.props.startGame}>
+                <span className="button" onClick={this.props.startGame}>
                   თამაში
-                </Link>
+                </span>
               </li>
               <li>
                 <Link className="button" to="/ranking">
