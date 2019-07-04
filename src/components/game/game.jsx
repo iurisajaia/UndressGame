@@ -16,7 +16,7 @@ class Game extends Component {
     box_height: "",
     position: 0,
     bottles: [],
-    // index: 0,
+    intervals: [],
     score: 0,
     lose: 1,
     started: false,
@@ -47,25 +47,22 @@ class Game extends Component {
     });
     document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
+    let intervals = [];
     for (let i = 0; i < 10; i++) {
       var coor_x =
         (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+      let minSpeedOfLevel = Math.floor(i / 10) + 16;
+      let time = 40 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
+      let delay = i * 0.9;
+      intervals.push(delay);
       bottles.push({
         coor_x: coor_x,
         id: i,
-        speed:
-          Math.floor(i / 20) +
-          8 +
-          Math.abs(Math.random() * (Math.floor(i / 20 + 8) / 5)),
-        delay:
-          (bottles.length &&
-            (20 / bottles[bottles.length - 1].speed) *
-              (0.4 + Math.random() * 0.2) +
-              bottles[bottles.length - 1].delay) ||
-          1
+        time: time,
+        delay: delay
       });
     }
-    this.setState({ bottles });
+    this.setState({ bottles, intervals });
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this.moveBox, false);
@@ -85,11 +82,15 @@ class Game extends Component {
   };
   fallen = a => {
     let temp = this.state.bottles;
+    let minSpeedOfLevel = Math.floor(temp.length / 10) + 16;
+    let time = 40 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
+    let intervals = this.state.intervals;
+    let desiredInterval =
+      intervals[intervals.length - 1] +
+      temp[temp.length - 1].time * (Math.random() * 0.3 + 0.2);
+    let delay = desiredInterval - (intervals[a] + temp[a].time);
+    this.setState({ intervals: [...intervals, desiredInterval] });
     temp[a] = "";
-    let speed =
-      Math.floor(temp.length / 20) +
-      8 +
-      Math.abs(Math.random() * (Math.floor(temp.length / 20 + 8) / 5));
     this.setState({
       bottles: [
         ...temp,
@@ -98,12 +99,8 @@ class Game extends Component {
             (Math.random() * this.state.dev_width) %
             (this.state.dev_width - 30),
           id: temp.length,
-          speed: speed,
-          delay:
-            (temp.length &&
-              temp[temp.length - 1].delay *
-                (speed / temp[temp.length - 1].speed)) ||
-            1
+          time: time,
+          delay: delay
         }
       ]
     });
@@ -140,6 +137,12 @@ class Game extends Component {
   };
 
   render() {
+    console.log(
+      "bottles",
+      this.state.bottles,
+      "intervals \n",
+      this.state.intervals
+    );
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -223,7 +226,7 @@ class Game extends Component {
                           style={{
                             left: `${bottle.coor_x}px`,
                             animationDelay: `${bottle.delay}s`,
-                            animationDuration: `${20 / bottle.speed}s`,
+                            animationDuration: `${bottle.time}s`,
                             animationPlayState: this.state.paused
                               ? "paused"
                               : null
