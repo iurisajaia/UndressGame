@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase from "../config/FirebaseConfig";
+import { withRouter } from "react-router-dom";
 
 class SubmitForm extends Component {
   constructor(props) {
@@ -49,6 +50,8 @@ class SubmitForm extends Component {
           console.log(res, "response");
         });
     }
+
+    this.props.history.push("/ranking");
   };
   render() {
     return (
@@ -83,4 +86,4 @@ class SubmitForm extends Component {
   }
 }
 
-export default SubmitForm;
+export default withRouter(SubmitForm);
