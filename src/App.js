@@ -11,7 +11,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: []
+      users: [],
+      sound: true
     };
   }
   componentDidMount() {
@@ -32,13 +33,23 @@ class App extends Component {
         err => console.log(err)
       );
   }
+  changeSound = () => {
+    this.setState({ sound: this.state.sound ? false : true });
+  };
   render() {
-    console.log(this.state.users);
+    console.log("app", this.state.sound);
     return (
       <>
         <Router>
           <Route
-            render={props => <Game {...props} users={this.state.users} />}
+            render={props => (
+              <Game
+                {...props}
+                changeSound={this.changeSound}
+                sound={this.state.sound}
+                users={this.state.users}
+              />
+            )}
             path="/"
             exact
           />

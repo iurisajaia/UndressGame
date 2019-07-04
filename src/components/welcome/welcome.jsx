@@ -5,15 +5,17 @@ import MuteSvg from "./muteSvg";
 
 class Welcome extends Component {
   state = {
-    music: false
+    sound: this.props.sound
   };
 
   changeVolume = () => {
     this.setState({
-      music: this.state.music ? false : true
+      sound: this.props.sound ? false : true
     });
+    this.props.changeSound();
   };
   render() {
+    console.log("welcome", this.state.sound);
     return (
       <>
         <div className="welcome-wraper">
@@ -37,14 +39,13 @@ class Welcome extends Component {
             </ul>
           </div>
           <div className="footer">
-            {this.state.music ? (
+            {this.state.sound ? (
               <div className="svg-box" onClick={this.changeVolume}>
-                {" "}
-                <MusicSvg />{" "}
+                <MuteSvg />{" "}
               </div>
             ) : (
               <div className="svg-box" onClick={this.changeVolume}>
-                <MuteSvg />
+                <MusicSvg />
               </div>
             )}
           </div>
