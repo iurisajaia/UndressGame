@@ -7,8 +7,7 @@ class SubmitForm extends Component {
     this.state = {
       name: "",
       number: "",
-      score: "",
-      users: []
+      score: ""
     };
   }
   handleChange = e => {
@@ -16,9 +15,14 @@ class SubmitForm extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    const user = this.state.users.find(
-      user => user.number == this.state.number
-    );
+    let user;
+    console.log(this.props.users, "users");
+    if (this.props.users) {
+      user = this.props.users.find(x => {
+        return Number(x.number) === Number(this.state.number);
+      });
+    }
+
     if (user) {
       firebase
         .firestore()
@@ -27,7 +31,10 @@ class SubmitForm extends Component {
         .set({
           name: this.state.name,
           number: this.state.number,
-          score: this.props.score * 100
+          score:
+            user.score > this.props.score * 100
+              ? user.score
+              : this.props.score * 100
         })
         .catch(err => console.log(err));
     } else {
