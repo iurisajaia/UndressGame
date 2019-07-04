@@ -16,7 +16,6 @@ class SubmitForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     let user;
-    console.log(this.props.users, "users");
     if (this.props.users) {
       user = this.props.users.find(x => {
         return Number(x.number) === Number(this.state.number);
@@ -54,7 +53,7 @@ class SubmitForm extends Component {
   render() {
     return (
       <div className="text-center">
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <input
             onChange={this.handleChange}
             name="name"
@@ -74,7 +73,7 @@ class SubmitForm extends Component {
             შენი ქულა : {this.props.score * 100}
           </span>{" "}
           <br />
-          <button onClick={this.handleSubmit}>გაგზავნა</button>
+          <button type="submit">გაგზავნა</button>
         </form>
         <button className="button" onClick={this.props.startGame}>
           კიდევ სცადე

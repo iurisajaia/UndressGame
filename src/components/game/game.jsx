@@ -7,6 +7,8 @@ import HouseSvg from "./houseSvg";
 import PauseSvg from "./pauseSvg";
 import PlaySvg from "./playSvg";
 import SubmitForm from "../submitScore/SubmitForm";
+import MuteSvg from "../welcome/muteSvg";
+import MusicSvg from "../welcome/musicSvg";
 
 class Game extends Component {
   state = {
@@ -23,7 +25,8 @@ class Game extends Component {
     level: 0,
     paused: false,
     soundOn: false,
-    currentTime: 0.0
+    currentTime: 0.0,
+    sound: this.props.sound
   };
 
   moveBoxWithMouse = e => {
@@ -46,7 +49,7 @@ class Game extends Component {
       box_width: window.innerWidth / 4,
       box_height: (window.innerWidth * 3) / 16
     });
-    document.addEventListener("keydown", this.moveBox, false);
+    // document.addEventListener("keydown", this.moveBox, false);
     var bottles = [];
     let intervals = [];
     for (let i = 0; i < 10; i++) {
@@ -66,12 +69,36 @@ class Game extends Component {
     this.setState({ bottles, intervals });
   }
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.moveBox, false);
-  }
+  // componentWillUnmount() {
+  //   document.removeEventListener("keydown", this.moveBox, false);
+  // }
 
   startGame = () => {
-    this.setState({ lose: 0, score: 0, started: true, paused: false });
+    // this.setState({ lose: 0, score: 0, started: true, paused: false });
+    var bottles = [];
+    let intervals = [];
+    for (let i = 0; i < 10; i++) {
+      var coor_x =
+        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+      let minSpeedOfLevel = Math.floor(i / 10) + 20;
+      let time = 65 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
+      let delay = i * 0.9;
+      intervals.push(delay);
+      bottles.push({
+        coor_x: coor_x,
+        id: i,
+        time: time,
+        delay: delay
+      });
+    }
+    this.setState({
+      bottles,
+      intervals,
+      lose: 0,
+      score: 0,
+      started: true,
+      paused: false
+    });
   };
 
   stopGame = () => {
@@ -80,9 +107,10 @@ class Game extends Component {
 
   pauseGame = () => {
     this.state.paused
-      ? this.setState({ paused: false })
-      : this.setState({ paused: true });
-    console.log(this.state);
+      ? this.setState({ paused: false, sound: this.props.sound ? false : true })
+      : this.setState({ paused: true, sound: this.props.sound ? false : true });
+
+    this.props.changeSound();
   };
 
   fallen = a => {
@@ -154,8 +182,14 @@ class Game extends Component {
     }, 20);
   };
 
+  changeSound = () => {
+    this.setState({
+      sound: this.props.sound ? false : true
+    });
+    this.props.changeSound();
+  };
   render() {
-    console.log("game", this.props.sound);
+    // console.log("game", this.props.sound);
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -221,13 +255,23 @@ class Game extends Component {
                     <button className="button" onClick={this.pauseGame}>
                       <PlaySvg />
                     </button>
+
+                    {this.props.sound ? (
+                      <div className="svg-box" onClick={this.changeSound}>
+                        <MusicSvg />
+                      </div>
+                    ) : (
+                      <div className="svg-box" onClick={this.changeSound}>
+                        <MuteSvg />{" "}
+                      </div>
+                    )}
                   </div>
                 ) : null}
                 {this.state.lose == 3 ? (
                   <SubmitForm
                     users={this.props.users}
                     score={this.state.score}
-                    startGame={this.startGamef}
+                    startGame={this.startGame}
                   />
                 ) : null}
                 {bottles &&
