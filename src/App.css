@@ -195,6 +195,8 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-family: mrglovani;
+  font-size: 12px;
 }
 .medal {
   width: 25%;
