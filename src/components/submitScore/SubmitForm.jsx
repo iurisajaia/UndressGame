@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import firebase from "../config/FirebaseConfig";
 import { withRouter } from "react-router-dom";
 import { validateInputs } from "../../validation/validation";
+import HouseSvg from "../game/houseSvg";
 
 class SubmitForm extends Component {
   constructor(props) {
@@ -107,9 +108,14 @@ class SubmitForm extends Component {
             გაგზავნა
           </button>
         </form>
-        <button className="button play-again" onClick={this.props.startGame}>
-          კიდევ სცადე
-        </button>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <button className="button play-again" onClick={this.props.startGame}>
+            კიდევ სცადე
+          </button>
+          <button className="button play-again" onClick={this.props.stopGame}>
+            <HouseSvg />
+          </button>
+        </div>
       </div>
     );
   }

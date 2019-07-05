@@ -12,7 +12,10 @@ import MusicSvg from "../welcome/musicSvg";
 import GG from "../../img/gg.png";
 import GB from "../../img/game-background.jpg";
 
-import GameBackSpace from "../../img/game-background.jpg";
+import Box from "../../img/free.png";
+import BoxOne from "../../img/box1.png";
+import BoxTwo from "../../img/box2.png";
+import BoxThree from "../../img/box3.png";
 
 class Game extends Component {
   state = {
@@ -20,6 +23,8 @@ class Game extends Component {
     dev_height: "",
     box_width: "",
     box_height: "",
+    bottle_width: "",
+    bottle_height: "",
     position: 200,
     bottles: [],
     intervals: [],
@@ -79,13 +84,16 @@ class Game extends Component {
       dev_width: window.innerWidth,
       dev_height: window.innerHeight,
       box_width: window.innerWidth / 4,
-      box_height: (window.innerWidth * 3) / 16
+      box_height: (window.innerWidth * 3) / 16,
+      bottle_width: window.innerWidth * 0.06,
+      bottle_height: window.innerWidth * 0.18
     });
     var bottles = [];
     let intervals = [];
     for (let i = 0; i < 10; i++) {
       var coor_x =
-        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+        (Math.random() * this.state.dev_width) %
+        (this.state.dev_width - this.state.bottle_width);
       let minSpeedOfLevel = Math.floor(i / 10) + 20;
       let time = 65 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
       let delay = i * 0.9;
@@ -106,7 +114,8 @@ class Game extends Component {
     let intervals = [];
     for (let i = 0; i < 10; i++) {
       var coor_x =
-        (Math.random() * this.state.dev_width) % (this.state.dev_width - 30);
+        (Math.random() * this.state.dev_width) %
+        (this.state.dev_width - this.state.bottle_width);
       let minSpeedOfLevel = Math.floor(i / 10) + 20;
       let time = 65 / (Math.abs(Math.random() * 0.4 + 1) * minSpeedOfLevel);
       let delay = i * 0.9;
@@ -157,7 +166,7 @@ class Game extends Component {
         {
           coor_x:
             (Math.random() * this.state.dev_width) %
-            (this.state.dev_width - 30),
+            (this.state.dev_width - this.state.bottle_width),
           id: temp.length,
           time: time,
           delay: delay
@@ -175,7 +184,7 @@ class Game extends Component {
         });
         if (
           elem.left < this.state.position + this.state.box_width &&
-          elem.left > this.state.position - 30 &&
+          elem.left > this.state.position - this.state.bottle_width &&
           elem.bottom > this.state.dev_height - this.state.box_height
         ) {
           if (this.props.sound) {
@@ -311,6 +320,7 @@ class Game extends Component {
                     users={this.props.users}
                     score={this.state.score}
                     startGame={this.startGame}
+                    stopGame={this.stopGame}
                   />
                 ) : null}
                 {bottles &&
@@ -339,7 +349,17 @@ class Game extends Component {
                     }
                   })}
                 {!this.state.paused ? (
-                  <div id="box" style={{ left: `${this.state.position}px` }} />
+                  <div
+                    id="box"
+                    style={{
+                      left: `${this.state.position}px`,
+                      backgroundImage:
+                        (!this.state.score && `url(${Box})`) ||
+                        (this.state.score == 1 && `url(${BoxOne})`) ||
+                        (this.state.score == 2 && `url(${BoxTwo})`) ||
+                        `url(${BoxThree})`
+                    }}
+                  />
                 ) : null}
               </div>
             </div>
