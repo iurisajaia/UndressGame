@@ -9,6 +9,8 @@ import PlaySvg from "./playSvg";
 import SubmitForm from "../submitScore/SubmitForm";
 import MuteSvg from "../welcome/muteSvg";
 import MusicSvg from "../welcome/musicSvg";
+import GG from "../../img/gg.png";
+import GB from "../../img/game-background.jpg";
 
 import GameBackSpace from "../../img/game-background.jpg";
 
@@ -18,7 +20,7 @@ class Game extends Component {
     dev_height: "",
     box_width: "",
     box_height: "",
-    position: 0,
+    position: 200,
     bottles: [],
     intervals: [],
     score: 0,
@@ -29,13 +31,18 @@ class Game extends Component {
     soundOn: false,
     currentTime: 0.0,
     sound: this.props.sound,
-    templates: []
+    templates: [],
+    occupation: 0
   };
 
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
-    if (e.touches[0].clientX < this.state.box_width / 2) {
-      this.setState({ position: 0 });
+
+    if (
+      e.touches[0].clientX <
+      screenWidth * this.state.occupation + this.state.box_width / 2
+    ) {
+      this.setState({ position: screenWidth * this.state.occupation });
     } else if (e.touches[0].clientX > screenWidth - this.state.box_width / 2) {
       this.setState({ position: screenWidth - this.state.box_width });
     } else {
@@ -48,7 +55,7 @@ class Game extends Component {
   componentDidMount() {
     switch (this.props.template) {
       case 0:
-        var templates = [<GameBackSpace />, "#333333"];
+        var templates = ["#000000", "#333333"];
         this.setState({ templates });
         break;
 
@@ -208,8 +215,13 @@ class Game extends Component {
     });
     this.props.changeSound();
   };
+
+  changeOccupation = () => {
+    this.setState({
+      occupation: this.state.occupation ? 0 : 0.2
+    });
+  };
   render() {
-    console.log(this.state.templates);
     if (
       this.state.bottles.length > 0 &&
       this.state.started &&
@@ -231,7 +243,10 @@ class Game extends Component {
               <div
                 className="game"
                 id="game"
-                style={{ backgroundImage: this.state.templates[0] }}
+                style={{
+                  backgroundImage:
+                    this.state.occupation == 0 ? `url('${GB}')` : `url('${GG}')`
+                }}
               >
                 {this.props.sound ? (
                   <>
@@ -334,6 +349,8 @@ class Game extends Component {
             changeSound={this.props.changeSound}
             sound={this.props.sound}
             startGame={this.startGame}
+            occupation={this.state.occupation}
+            changeOccupation={this.changeOccupation}
           />
         )}
       </>
