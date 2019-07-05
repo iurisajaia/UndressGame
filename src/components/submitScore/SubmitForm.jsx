@@ -3,6 +3,7 @@ import firebase from "../config/FirebaseConfig";
 import { withRouter } from "react-router-dom";
 import { validateInputs } from "../../validation/validation";
 import HouseSvg from "../game/houseSvg";
+import ReloadSvg from "./reloadSvg";
 
 class SubmitForm extends Component {
   constructor(props) {
@@ -108,9 +109,15 @@ class SubmitForm extends Component {
             გაგზავნა
           </button>
         </form>
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            width: "50%"
+          }}
+        >
           <button className="button play-again" onClick={this.props.startGame}>
-            კიდევ სცადე
+            <ReloadSvg />
           </button>
           <button className="button play-again" onClick={this.props.stopGame}>
             <HouseSvg />

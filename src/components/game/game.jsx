@@ -300,9 +300,9 @@ class Game extends Component {
                 </div>
                 {this.state.paused ? (
                   <div className="paused-wraper">
-                    <button className="button" onClick={this.pauseGame}>
+                    <div className="svg-box" onClick={this.pauseGame}>
                       <PlaySvg />
-                    </button>
+                    </div>
 
                     {this.props.sound ? (
                       <div className="svg-box" onClick={this.changeSound}>

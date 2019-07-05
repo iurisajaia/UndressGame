@@ -2,7 +2,7 @@ import React from "react";
 
 const PlaySvg = () => {
   return (
-    <svg version="1.1" x="0px" y="0px" viewBox="0 0 473.931 473.931" width="30">
+    <svg version="1.1" x="0px" y="0px" viewBox="0 0 473.931 473.931" width="40">
       <circle fill="#357180" cx="236.966" cy="236.966" r="236.966" />
       <path
         fill="#FFFFFF"
