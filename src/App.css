@@ -94,6 +94,32 @@
   background-size: cover;
   background-position: center;
   z-index: 9999999999;
+  width: 100%;
+}
+.text-center form {
+  width: 70%;
+  margin: auto;
+}
+.text-center form input {
+  border: none;
+  border-radius: 5px;
+  padding: 8px 5px 5px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  width: 100%;
+}
+.text-center form input:focus {
+  outline: none;
+}
+.text-center form input::placeholder {
+  font-family: nino;
+  color: #fff;
+}
+.text-center form span {
+  font-size: 12px;
+  font-family: nino;
+  display: block;
+  color: #fff;
 }
 .life-box {
   position: absolute;
@@ -288,8 +314,11 @@
   background: none;
 }
 
-form .your-score {
-  font-size: 12px;
+form span.your-score {
+  font-size: 37px;
+  color: #fff;
+  font-family: mrglovani;
+  word-break: break-all;
 }
 .occupation-button {
   /* background-image: url("./img/20.png"); */
@@ -302,4 +331,27 @@ form .your-score {
 }
 .occupation-button:focus {
   outline: none;
+}
+
+.play-again {
+  padding: 10px 15px;
+  line-height: 20px;
+  height: auto;
+  font-size: 14px;
+  display: block;
+  text-shadow: 0 -1px 0 #4a8a65, 0 1px 1px #c2dece;
+  border: none;
+}
+.play-again:before {
+  line-height: 20px;
+  height: auto;
+}
+
+.submit-form {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  padding: 10px 15px;
+  border: none;
+  color: #fff;
+  font-family: mrglovani;
 }
