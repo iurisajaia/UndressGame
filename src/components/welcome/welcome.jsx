@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import MusicSvg from "./musicSvg";
 import MuteSvg from "./muteSvg";
-
+import OC from "../../img/20.png";
+import GX from "../../img/wrapper-background.jpeg";
 class Welcome extends Component {
   state = {
     sound: this.props.sound
@@ -14,6 +15,7 @@ class Welcome extends Component {
     });
     this.props.changeSound();
   };
+
   render() {
     return (
       <>
@@ -43,10 +45,18 @@ class Welcome extends Component {
                 <MuteSvg />{" "}
               </div>
             ) : (
-                <div className="svg-box" onClick={this.changeVolume}>
-                  <MusicSvg />
-                </div>
-              )}
+              <div className="svg-box" onClick={this.changeVolume}>
+                <MusicSvg />
+              </div>
+            )}
+            <button
+              onClick={this.props.changeOccupation}
+              style={{
+                backgroundImage:
+                  this.props.occupation == 0 ? `url('${GX}')` : `url('${OC}')`
+              }}
+              className="occupation-button"
+            />
           </div>
         </div>
       </>

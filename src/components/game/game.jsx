@@ -9,6 +9,8 @@ import PlaySvg from "./playSvg";
 import SubmitForm from "../submitScore/SubmitForm";
 import MuteSvg from "../welcome/muteSvg";
 import MusicSvg from "../welcome/musicSvg";
+import GG from "../../img/gg.png";
+import GB from "../../img/game-background.jpg";
 
 class Game extends Component {
   state = {
@@ -16,7 +18,7 @@ class Game extends Component {
     dev_height: "",
     box_width: "",
     box_height: "",
-    position: 0,
+    position: 200,
     bottles: [],
     intervals: [],
     score: 0,
@@ -27,13 +29,18 @@ class Game extends Component {
     soundOn: false,
     currentTime: 0.0,
     sound: this.props.sound,
-    templates: []
+    templates: [],
+    occupation: 0
   };
 
   moveBoxWithMouse = e => {
     var screenWidth = document.getElementById("root").offsetWidth;
-    if (e.touches[0].clientX < this.state.box_width / 2) {
-      this.setState({ position: 0 });
+
+    if (
+      e.touches[0].clientX <
+      screenWidth * this.state.occupation + this.state.box_width / 2
+    ) {
+      this.setState({ position: screenWidth * this.state.occupation });
     } else if (e.touches[0].clientX > screenWidth - this.state.box_width / 2) {
       this.setState({ position: screenWidth - this.state.box_width });
     } else {
@@ -46,23 +53,23 @@ class Game extends Component {
   componentDidMount() {
     switch (this.props.template) {
       case 0:
-        var templates = ['#000000', '#333333'];
-        this.setState({ templates })
+        var templates = ["#000000", "#333333"];
+        this.setState({ templates });
         break;
 
       case 1:
-        var templates = ['#ffffff', '#555555'];
-        this.setState({ templates })
+        var templates = ["#ffffff", "#555555"];
+        this.setState({ templates });
         break;
 
       case 2:
-        var templates = ['darkred', 'darkgreen'];
-        this.setState({ templates })
+        var templates = ["darkred", "darkgreen"];
+        this.setState({ templates });
         break;
 
       case 3:
-        var templates = ['darkblue', 'yellow'];
-        this.setState({ templates })
+        var templates = ["darkblue", "yellow"];
+        this.setState({ templates });
         break;
     }
 
@@ -70,8 +77,7 @@ class Game extends Component {
       dev_width: window.innerWidth,
       dev_height: window.innerHeight,
       box_width: window.innerWidth / 4,
-      box_height: (window.innerWidth * 3) / 16,
-
+      box_height: (window.innerWidth * 3) / 16
     });
     var bottles = [];
     let intervals = [];
@@ -91,7 +97,6 @@ class Game extends Component {
     }
     this.setState({ bottles, intervals });
   }
-
 
   startGame = () => {
     // this.setState({ lose: 0, score: 0, started: true, paused: false });
@@ -208,6 +213,13 @@ class Game extends Component {
     });
     this.props.changeSound();
   };
+
+  changeOccupation = () => {
+    this.setState({
+      occupation: this.state.occupation ? 0 : 0.2
+    });
+    console.log(this.state.occupation);
+  };
   render() {
     if (
       this.state.bottles.length > 0 &&
@@ -227,7 +239,14 @@ class Game extends Component {
         {started ? (
           <>
             <div className="fullgame" onTouchMove={this.moveBoxWithMouse}>
-              <div className="game" id="game" style={{ background: this.state.templates[0] }}>
+              <div
+                className="game"
+                id="game"
+                style={{
+                  backgroundImage:
+                    this.state.occupation == 0 ? `url('${GB}')` : `url('${GG}')`
+                }}
+              >
                 {this.props.sound ? (
                   <>
                     <audio id="audio">
@@ -245,8 +264,8 @@ class Game extends Component {
                       {this.state.score ? (
                         <h1>{this.state.score * 100}</h1>
                       ) : (
-                          <h1>0</h1>
-                        )}
+                        <h1>0</h1>
+                      )}
                     </div>
                     <div>
                       {this.state.started ? (
@@ -280,10 +299,10 @@ class Game extends Component {
                         <MusicSvg />
                       </div>
                     ) : (
-                        <div className="svg-box" onClick={this.changeSound}>
-                          <MuteSvg />{" "}
-                        </div>
-                      )}
+                      <div className="svg-box" onClick={this.changeSound}>
+                        <MuteSvg />{" "}
+                      </div>
+                    )}
                   </div>
                 ) : null}
                 {this.state.lose == 3 ? (
@@ -325,12 +344,14 @@ class Game extends Component {
             </div>
           </>
         ) : (
-            <Welcome
-              changeSound={this.props.changeSound}
-              sound={this.props.sound}
-              startGame={this.startGame}
-            />
-          )}
+          <Welcome
+            changeSound={this.props.changeSound}
+            sound={this.props.sound}
+            startGame={this.startGame}
+            occupation={this.state.occupation}
+            changeOccupation={this.changeOccupation}
+          />
+        )}
       </>
     );
   }
