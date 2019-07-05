@@ -13,10 +13,13 @@ class App extends Component {
     this.state = {
       users: [],
       sound: true,
-      template: 0
+      template: 0,
+      unsubscribe: null
     };
   }
+
   componentDidMount() {
+    let unsubscribe;
     firebase
       .firestore()
       .collection("ranking")
@@ -37,6 +40,12 @@ class App extends Component {
         },
         err => console.log(err)
       );
+    this.setState({
+      unsubscribe: unsubscribe
+    });
+  }
+  componentWillUnmount() {
+    this.state.unsubscribe();
   }
   changeSound = () => {
     this.setState({ sound: this.state.sound ? false : true });

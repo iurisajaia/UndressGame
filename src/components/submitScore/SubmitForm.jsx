@@ -7,8 +7,8 @@ class SubmitForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      number: "",
+      name: localStorage.getItem("name") || "",
+      number: localStorage.getItem("number") || "",
       score: 0,
       errors: {
         name: "",
@@ -47,6 +47,10 @@ class SubmitForm extends Component {
                   ? user.score
                   : this.props.score * 100
             })
+            .then(() => {
+              localStorage.setItem("name", this.state.name);
+              localStorage.setItem("number", this.state.number);
+            })
             .catch(err => console.log(err));
         } else {
           firebase
@@ -58,14 +62,14 @@ class SubmitForm extends Component {
               score: this.props.score * 100
             })
             .then(res => {
-              console.log(res, "response");
+              localStorage.setItem("name", this.state.name);
+              localStorage.setItem("number", this.state.number);
             });
         }
 
         this.props.history.push("/ranking");
       })
       .catch(err => {
-        console.log(err);
         err.inner.map(item => {
           this.setState({
             errors: {
@@ -73,6 +77,7 @@ class SubmitForm extends Component {
               [item.path]: item.message
             }
           });
+          return 1;
         });
       });
   };
@@ -80,38 +85,29 @@ class SubmitForm extends Component {
     return (
       <div className="text-center">
         <form onSubmit={this.handleSubmit}>
+          <span className="your-score">{this.props.score * 100}</span>{" "}
           <input
             onChange={this.handleChange}
             name="name"
             type="text"
+            value={this.state.name}
             placeholder="სახელი"
           />
-          {this.state.errors.name && (
-            <span style={{ fontSize: 14, display: "block" }}>
-              {this.state.errors.name}
-            </span>
-          )}
-          <br />
+          {this.state.errors.name && <span>{this.state.errors.name}</span>}
           <input
             onChange={this.handleChange}
             name="number"
             type="number"
+            value={this.state.number}
             placeholder="ნომერი"
           />
-          {this.state.errors.number && (
-            <span style={{ fontSize: 14, display: "block" }}>
-              {this.state.errors.number}
-            </span>
-          )}
-          <br />
+          {this.state.errors.number && <span>{this.state.errors.number}</span>}
           <input type="hidden" name="score" value={this.props.score * 100} />
-          <span className="your-score">
-            შენი ქულა : {this.props.score * 100}
-          </span>{" "}
-          <br />
-          <button type="submit">გაგზავნა</button>
+          <button type="submit" className="submit-form">
+            გაგზავნა
+          </button>
         </form>
-        <button className="button" onClick={this.props.startGame}>
+        <button className="button play-again" onClick={this.props.startGame}>
           კიდევ სცადე
         </button>
       </div>
