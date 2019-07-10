@@ -65,7 +65,7 @@
   animation: fall 2s linear;
   animation-timing-function: linear;
   position: absolute;
-  width: 6%;
+  width: 10%;
   height: 18vw;
   top: -80px;
   background-image: url("./img/bottle.png");
