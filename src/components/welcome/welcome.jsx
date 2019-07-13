@@ -4,6 +4,8 @@ import MusicSvg from "./musicSvg";
 import MuteSvg from "./muteSvg";
 import OC from "../../img/20.png";
 import GX from "../../img/wrapper-background.jpeg";
+import styles from './welcome.module.css';
+
 class Welcome extends Component {
   state = {
     sound: this.props.sound
@@ -19,7 +21,68 @@ class Welcome extends Component {
   render() {
     return (
       <>
-        <div className="welcome-wraper">
+        <div className={styles.wellcomeWrapper}>
+
+
+
+
+          {/* Header */}
+          <div className={styles.titleBox}>
+
+            {/* Sun*/}
+            <div className={styles.sun}>
+              <div className={styles.ray_box}>
+                <div className={`${styles.ray} ${styles.ray1}`} ></div>
+                <div className={`${styles.ray} ${styles.ray2}`} ></div>
+                <div className={`${styles.ray} ${styles.ray3}`} ></div>
+                <div className={`${styles.ray} ${styles.ray4}`} ></div>
+                <div className={`${styles.ray} ${styles.ray5}`} ></div>
+                <div className={`${styles.ray} ${styles.ray6}`} ></div>
+                <div className={`${styles.ray} ${styles.ray7}`} ></div>
+                <div className={`${styles.ray} ${styles.ray8}`} ></div>
+                <div className={`${styles.ray} ${styles.ray9}`} ></div>
+                <div className={`${styles.ray} ${styles.ray10}`} ></div>
+              </div>
+            </div>
+            {/* Title */}
+            <div className={styles.titleWrapper}>
+              <h1 className={styles.title}>GAME TITLE</h1>
+
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className={styles.playBtnBox}>
+
+            {/* PLay Button */}
+            <div className={styles.startGame}>
+              <div className={styles.playBtnWrap}>
+                <span className={styles.playBtn} onClick={this.props.startGame}>
+                  Play
+            </span>
+              </div>
+            </div>
+
+            {/* Sounds */}
+            <div className={styles.soundsBox}>
+              <div className={styles.soundsWrapper}>
+                {this.state.sound ? (
+                  <div className={styles.soundBtn} onClick={this.changeVolume}>
+                    <MuteSvg />{" "}
+                  </div>
+                ) : (
+                    <div className={styles.soundBtn} onClick={this.changeVolume}>
+                      <MusicSvg />
+                    </div>
+                  )}
+                {/* <button className={styles.soundBtn}>Music</button> */}
+                {/* <button className={styles.soundBtn} onClick={this.changeVolume}>Sounds</button> */}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        {/* <div className="welcome-wraper">
           <div className="menu">
             <ul>
               <li>
@@ -58,7 +121,7 @@ class Welcome extends Component {
               className="occupation-button"
             />
           </div>
-        </div>
+        </div> */}
       </>
     );
   }
